@@ -1,5 +1,6 @@
 #import math
 from math import sin, radians
+from random import uniform
 
 GRAVITY = 9.81
 SCALE = 0.9
@@ -19,27 +20,22 @@ def get_input():
     velocity = float(input("Prędkość początkowa: "))
     return angle, velocity
 
-def print_impact(impact):
+def print_impact(impact, pos1, pos2):
     scaled_impact = round(impact*SCALE)
-    print(scaled_impact)
-    '''for i in range(0,LENGTH):
-        if i == scaled_impact:
-            print("X", end="")
-        else:
-            print("_", end="")
-    print()'''
     ground = ["_"]*LENGTH
     ground[scaled_impact] = "X"
-    '''
-    for symbol in ground:
-        print(symbol, end="")
-    '''
+    ground[pos1] = "1"
+    ground[pos2] = "2"
     [print(symbol, end="") for symbol in ground]
     print()
 
-
+def start_game():
+    start1 = uniform(0,LENGTH/2)
+    start2 = uniform(LENGTH/2+1, LENGTH)
+    return round(start1), round(start2)
 
 def main():
+    pos1, pos2 = start_game()
     while True:
         angle, velocity = get_input()
         print(velocity)
@@ -47,7 +43,7 @@ def main():
 
         z = calculate_impact(angle, velocity)
         print(z)
-        print_impact(z)
+        print_impact(z,pos1, pos2)
 
 
 if __name__ == '__main__':
