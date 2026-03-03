@@ -2,6 +2,7 @@
 from math import sin, radians
 from random import uniform
 
+
 GRAVITY = 9.81
 SCALE = 0.9
 LENGTH = 80
@@ -43,15 +44,18 @@ def check_hit(impact, pos):
 
 def main():
     pos1, pos2 = start_game()
+    shooter = pos1
+    target = pos2
     while True:
+        print("Gracz: ", 1 if shooter == pos1 else 2)
         angle, velocity = get_input()
-        print(velocity)
-        print(angle)
 
-        z = calculate_impact(angle, velocity, pos1/SCALE)
-        print(z)
+        z = calculate_impact(angle, velocity, shooter/SCALE)
+
         print_impact(z,pos1, pos2)
-        print(check_hit(z, pos2/SCALE))
+        if check_hit(z, target/SCALE):
+            break
+        shooter,target = target,shooter
 
 
 if __name__ == '__main__':
