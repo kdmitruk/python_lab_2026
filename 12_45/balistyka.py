@@ -32,6 +32,11 @@ def main():
         z = calculate_impact(angle, speed, shooter)
         print(z)
         display(z,player1,player2)
+        if check_hit(z,target):
+            print(f"{"First" if shooter == player1 else "Second"} player is winner.")
+
+            break
+
         shooter, target = target, shooter
 
 def display(z,player1,player2):
@@ -51,5 +56,8 @@ def start_game():
     player1 = uniform(1,LENGTH/2)*SCALE
     player2 = uniform(LENGTH/2,LENGTH-1)*SCALE
     return player1,player2
+def check_hit(z,target):
+    return abs(z-target) < IMPACT_RADIUS
+
 if __name__ == '__main__':
     main()
