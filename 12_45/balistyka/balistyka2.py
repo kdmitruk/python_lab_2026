@@ -1,5 +1,13 @@
 import curses
 
+def load_map(path):
+    grid = []
+    with open(path, "r") as file:
+        for line in file:
+            row = [symbol == "X" for symbol in line]
+            grid.append(row)
+    return grid
+
 def main(stdscr):
     player1 = 1
     player2 = 2
@@ -15,4 +23,5 @@ def main(stdscr):
         shooter, target = target, shooter
 
 if __name__ == '__main__':
-    curses.wrapper(main)
+    load_map(path = "map.txt")
+    # curses.wrapper(main)
