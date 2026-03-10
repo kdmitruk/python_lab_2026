@@ -1,5 +1,5 @@
 import curses
-
+import math
 
 
 def load_map(path):
@@ -49,12 +49,16 @@ def main(stdscr):
         stdscr.addstr(max_y - 1, 0, info)
         return offset_x, offset_y
     grid,player1,player2 = load_map(path="map.txt")
-
+    curses.mousemask(curses.ALL_MOUSE_EVENTS)
     shooter = player1
     target = player2
     offset_x, offset_y = 0,0
+    mx = 0
+    my = 0
+    angle = 0
     while True:
         info = f"{"First" if shooter == player1 else "Second"} player is up:"
+        info += f" {mx} {my} {angle}"
         offset_x, offset_y = display(grid, info, offset_x, offset_y,player1,player2)
         key = stdscr.getch()
         if key == curses.KEY_UP:
@@ -65,7 +69,13 @@ def main(stdscr):
             offset_x -= 4
         elif key == curses.KEY_RIGHT:
             offset_x += 4
-        shooter, target = target, shooter
-
+        elif key == curses.KEY_MOUSE:
+            _,mx,my,_,buttons = curses.getmouse()
+            mx += offset_x
+            my += offset_y
+            shooter, target = target, shooter
+            dx = mx - shooter[0]
+            dy = shooter[1] - my
+            angle = math.degrees(math.atan2(dy,dx))
 if __name__ == '__main__':
     curses.wrapper(main)
