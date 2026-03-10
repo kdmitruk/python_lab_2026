@@ -1,6 +1,5 @@
 import curses
 
-
 def main(stdscr):
     stdscr.keypad(True)
     player1 = (0, 0)
@@ -16,6 +15,17 @@ def main(stdscr):
 
         shooter, target = target, shooter
 
+def read_file(filename):
+    grid = []
+    with open(filename, "r") as file:
+        for line in file:
+            line = line[:-1]
+            row = [symbol == "X" for symbol in line]
+            grid.append(row)
+
+        return grid
+
 if __name__ == '__main__':
-    curses.wrapper(main)
+    read_file("map.txt")
+    # curses.wrapper(main)
 
