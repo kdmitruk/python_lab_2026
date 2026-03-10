@@ -1,7 +1,14 @@
 import curses
 
 def main(stdscr):
-    def display(info, grid,ox,oy):
+    def show_player(pos, symbol, ox, oy, view_height, view_width):
+        py, px = pos
+        py -= oy
+        px -= ox
+        if px >= 0 and px < view_width and py >= 0 and py < view_height:
+            stdscr.addch(py, px, symbol)
+
+    def display(info, grid,ox,oy, player1, player2):
         max_y, max_x = stdscr.getmaxyx()
         stdscr.erase()
         view_width = max_x
@@ -15,19 +22,19 @@ def main(stdscr):
             row = row[ox:max_x + ox]
             row = "".join(row)
             stdscr.addstr(y-oy,0,row)
+        show_player(player1, '1', ox, oy, view_height, view_width)
+        show_player(player2, '2', ox, oy, view_height, view_width)
         stdscr.addstr(max_y-1, 0, info)
         return ox,oy
     stdscr.keypad(True)
-    player1 = (0, 0)
-    player2 = (0, 1)
+    grid, player1, player2 = read_file("map.txt")
     shooter = player1
     target = player2
-    grid = read_file("map.txt")
     ox = 0
     oy = 0
     while True:
         info = f"{"First" if shooter == player1 else "Second"} player is up:"
-        ox,oy = display(info,grid,ox,oy)
+        ox,oy = display(info,grid,ox,oy, player1, player2)
         key = stdscr.getch()
         if key == curses.KEY_UP:
             oy -= 2
@@ -44,12 +51,18 @@ def main(stdscr):
 def read_file(filename):
     grid = []
     with open(filename, "r") as file:
-        for line in file:
+        for y, line in enumerate(file):
             line = line[:-1]
+
+            for x, character in enumerate(line):
+                if character == "1":
+                    player1 = (y, x)
+                if character == "2":
+                    player2 = (y, x)
             row = [symbol == "X" for symbol in line]
             grid.append(row)
 
-        return grid
+        return grid, player1, player2
 
 if __name__ == '__main__':
     curses.wrapper(main)
