@@ -9,19 +9,27 @@ def load_map(path):
     return grid
 
 def main(stdscr):
+    def display(grid, info):
+        max_y, max_x = stdscr.getmaxyx()
+        stdscr.erase()
+        for y in range(0, max_y-2):
+            row = grid[y]
+            row = row[:max_x]
+            row = ["#" if flag else " " for flag in row]
+            row = "".join(row)
+            stdscr.addstr(y, 0, row)
+        stdscr.addstr(max_y - 1, 0, info)
     player1 = 1
     player2 = 2
+    grid = load_map(path="map.txt")
 
     shooter = player1
     target = player2
     while True:
         info = f"{"First" if shooter == player1 else "Second"} player is up:"
-        max_y, max_x = stdscr.getmaxyx()
-        stdscr.erase()
-        stdscr.addstr(max_y-1, 0, info)
+        display(grid, info)
         stdscr.getch()
         shooter, target = target, shooter
 
 if __name__ == '__main__':
-    load_map(path = "map.txt")
-    # curses.wrapper(main)
+    curses.wrapper(main)
