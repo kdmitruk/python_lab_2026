@@ -1,4 +1,6 @@
 import curses
+import math
+
 
 def main(stdscr):
     def show_player(pos, symbol, ox, oy, view_height, view_width):
@@ -26,14 +28,18 @@ def main(stdscr):
         show_player(player2, '2', ox, oy, view_height, view_width)
         stdscr.addstr(max_y-1, 0, info)
         return ox,oy
+    curses.mousemask(curses.ALL_MOUSE_EVENTS)
     stdscr.keypad(True)
     grid, player1, player2 = read_file("map.txt")
     shooter = player1
     target = player2
     ox = 0
     oy = 0
+    mx = 0
+    my = 0
+    angle = 0
     while True:
-        info = f"{"First" if shooter == player1 else "Second"} player is up:"
+        info = f"{"First" if shooter == player1 else "Second"} player is up: {mx},{my},{angle}"
         ox,oy = display(info,grid,ox,oy, player1, player2)
         key = stdscr.getch()
         if key == curses.KEY_UP:
@@ -44,6 +50,14 @@ def main(stdscr):
             ox -= 4
         elif key == curses.KEY_RIGHT:
             ox += 4
+        elif key == curses.KEY_MOUSE:
+            _, mx, my, _, buttons = curses.getmouse()
+            mx += ox
+            my += oy
+            if buttons & curses.BUTTON1_CLICKED:
+                a = player1[0] - my
+                b = mx - player1[1]
+                angle = math.degrees(math.atan2(a,b))
         stdscr.refresh()
 
         shooter, target = target, shooter
