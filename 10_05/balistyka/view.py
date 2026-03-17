@@ -3,7 +3,7 @@ class View:
         self.stdscr = stdscr
     def size(self):
         return self.stdscr.getmaxyx()
-    def draw(self, map, camera):
+    def draw(self, map, camera, info):
         grid = map.grid
         offset_y = camera.y
         offset_x = camera.x
@@ -16,4 +16,4 @@ class View:
             row = ["#" if flag else " " for flag in row]
             row = "".join(row)
             self.stdscr.addstr(y - offset_y, 0, row)
-        self.stdscr.addstr(0, 0, f"{offset_x}, {offset_y}")
+        self.stdscr.addstr(0, 0, f"{info}")
