@@ -3,6 +3,7 @@ class Map:
         self.grid = []
         self.player1 = None
         self.player2 = None
+        self.__load(path)
 
     def  __load(self, path):
         with open(path, "r") as file:
