@@ -5,12 +5,12 @@ class View:
     def size (self) :
         y,x = self.stdscr.getmaxyx()
         return x,y-2
-    def draw(self,map):
+    def draw(self,map, camera, info):
         max_x, max_y = self.size()
         grid_width = map.width()
         grid_height = map.height()
-        offset_x=0
-        offset_y=0
+        offset_x=camera.x()
+        offset_y=camera.y()
         offset_x = min(max(0, offset_x), grid_width - max_x)
         offset_y = min(max(0, offset_y), grid_height - max_y)
         self.stdscr.erase()
@@ -24,6 +24,7 @@ class View:
         self.display_player(map.player1, "1", (offset_x, offset_y), max_x, max_y)
         self.display_player(map.player2, "2", (offset_x, offset_y), max_x, max_y)
 
+        self.stdscr.addstr(max_y, 0, info)
 
     def display_player(self,player,symbol,offset,view_width,view_height):
         px,py=player
