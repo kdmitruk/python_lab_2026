@@ -5,7 +5,7 @@ class View:
     def size (self) :
         y,x = self.stdscr.getmaxyx()
         return x,y-2
-    def draw(self,map, camera, info):
+    def draw(self,map, camera, bullet, info):
         max_x, max_y = self.size()
         grid_width = map.width()
         grid_height = map.height()
@@ -23,6 +23,12 @@ class View:
 
         self.display_player(map.player1, "1", (offset_x, offset_y), max_x, max_y)
         self.display_player(map.player2, "2", (offset_x, offset_y), max_x, max_y)
+
+        if bullet is not None:
+            sx = int(bullet.x) - offset_x
+            sy = int(bullet.y) - offset_y
+            if 0 <= sy < max_y and 0 <= sx < max_x - 1:
+                self.stdscr.addch(sy, sx, '*')
 
         self.stdscr.addstr(max_y, 0, info)
 
