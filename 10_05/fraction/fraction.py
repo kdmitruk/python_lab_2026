@@ -46,3 +46,16 @@ class Fraction:
             self.numerator*other.denominator,
             self.denominator*other.numerator
         )
+
+    def __add__(self, other):
+        return self.__common(other, lambda a, b: a+b)
+
+    def __sub__(self,other):
+        return self.__common(other, lambda a, b: a-b)
+
+    def __common(self, other, operation):
+        if self.denominator == other.denominator:
+            return Fraction(operation (self.numerator, other.numerator), self.denominator)
+        else:
+            return Fraction(self.numerator*other.denominator+other.numerator*self.denominator,
+                            self.denominator*other.denominator)
