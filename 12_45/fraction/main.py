@@ -1,7 +1,7 @@
 from fraction import Fraction
 
 def main():
-    half = Fraction(3,7)
+    half = Fraction(3,9)
     print(half.is_integer())
     print(half)
     print(float(half))
