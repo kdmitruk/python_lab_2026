@@ -15,6 +15,12 @@ def main():
     print(fraction*fraction3)
     print(fraction*2)
     print(3*fraction)
+    try:
+        print(fraction/Fraction(0,5))
+    except ZeroDivisionError:
+        print("ŹLE!")
+
+
 
 if __name__ == '__main__':
     main()

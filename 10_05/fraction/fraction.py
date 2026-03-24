@@ -36,7 +36,13 @@ class Fraction:
                 self.numerator*other,
                 self.denominator
             )
-
-
         else:
             return NotImplemented
+
+    def __truediv__(self, other):
+        if other.numerator == 0:
+            raise ZeroDivisionError
+        return Fraction(
+            self.numerator*other.denominator,
+            self.denominator*other.numerator
+        )
