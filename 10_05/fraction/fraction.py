@@ -1,5 +1,8 @@
 from math import gcd
 
+from sympy.physics.optics import FreeSpace
+
+
 class Fraction:
     def __init__(self, numerator, denominator):
         self.numerator = numerator
@@ -19,4 +22,21 @@ class Fraction:
     def __float__(self):
         return self.numerator/self.denominator
 
+    def __rmul__(self, other):
+        return self*other
 
+    def __mul__(self, other):
+        if isinstance(other, Fraction):
+            return Fraction(
+                self.numerator*other.numerator,
+                self.denominator*other.denominator
+            )
+        elif isinstance(other,int):
+            return Fraction(
+                self.numerator*other,
+                self.denominator
+            )
+
+
+        else:
+            return NotImplemented

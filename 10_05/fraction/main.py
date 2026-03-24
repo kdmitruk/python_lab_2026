@@ -11,6 +11,10 @@ def main():
     print(fraction2)
     print(fraction2.__float__())
     print(float(fraction2))
+    fraction3=Fraction(2,6)
+    print(fraction*fraction3)
+    print(fraction*2)
+    print(3*fraction)
 
 if __name__ == '__main__':
     main()
