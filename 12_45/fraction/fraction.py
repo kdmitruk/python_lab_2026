@@ -20,3 +20,20 @@ class Fraction:
         self.numerator//=divisor
         self.denominator//=divisor
 
+    def __rmul__(self, other):
+        return self * other
+
+    def __mul__(self, other):
+        if isinstance(other, Fraction):
+            return Fraction(
+                self.numerator * other.numerator,
+                self.denominator * other.denominator
+            )
+        elif isinstance(other, int):
+            return Fraction(
+                self.numerator * other,
+                self.denominator
+            )
+        else:
+            return NotImplemented
+
