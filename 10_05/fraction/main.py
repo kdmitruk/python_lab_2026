@@ -1,5 +1,6 @@
 from fraction import Fraction
 
+
 def main():
     fraction = Fraction(3, 4)
     print(f"{fraction.numerator}, {fraction.denominator}")
