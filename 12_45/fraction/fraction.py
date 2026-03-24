@@ -3,6 +3,8 @@ import math
 
 class Fraction:
     def __init__(self, numerator, denominator):
+        if denominator == 0:
+            raise ZeroDivisionError
         self.numerator = numerator
         self.denominator = denominator
         self.__reduce()
@@ -37,3 +39,20 @@ class Fraction:
         else:
             return NotImplemented
 
+    def __truediv__(self, other):
+        return Fraction(
+            self.numerator * other.denominator,
+            self.denominator * other.numerator
+        )
+
+    def __add__(self, other):
+        return self.common_add_sub(other, lambda a, b:a+b)
+
+    def __sub__(self, other):
+        return self.common_add_sub(other, lambda a, b:a-b)
+
+    def common_add_sub(self, other, operation):
+        return Fraction(
+            operation(self.numerator*other.denominator,other.numerator*self.denominator),
+            self.denominator*other.denominator
+        )
