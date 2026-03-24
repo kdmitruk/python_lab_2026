@@ -26,13 +26,14 @@ class Fraction:
         return self * other
 
     def __mul__(self, other):
+        fraction_type = type(self)
         if isinstance(other, Fraction):
-            return Fraction(
+            return fraction_type(
                 self.numerator * other.numerator,
                 self.denominator * other.denominator
             )
         elif isinstance(other, int):
-            return Fraction(
+            return fraction_type(
                 self.numerator * other,
                 self.denominator
             )
