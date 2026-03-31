@@ -25,3 +25,11 @@ class MainWidget (QWidget):
         request = requests.get(f"https://geocoding-api.open-meteo.com/v1/search?name={city}")
         data = request.json()
         print(data)
+        print(request.status_code)
+        if request.status_code != 200:
+            return
+        print(data["results"])
+        for result in data["results"]:
+            output = f"{result["name"]}, {result["latitude"]}, {result["longitude"]}"
+            print(output)
+
