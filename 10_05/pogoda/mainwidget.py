@@ -7,11 +7,12 @@ class MainWidget (QWidget):
 
         self.setWindowTitle("Pogoda")
 
+        self.label = QLabel("Miasto")
         self.edit = QLineEdit()
         self.button = QPushButton("Okay")
 
         self.layout = QGridLayout(self)
-        self.layout.addWidget(QLabel("Miasto"), 0, 0)
+        self.layout.addWidget(self.label, 0, 0)
         self.layout.addWidget(self.edit, 0, 1)
         self.layout.addWidget(self.button, 1, 0, 1, 2)
 
