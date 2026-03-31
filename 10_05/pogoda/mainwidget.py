@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QLabel, QGridLayout, QMessageBox, QListWidget, QListWidgetItem
 import requests
 
@@ -23,7 +24,7 @@ class MainWidget (QWidget):
         self.layout.addWidget(self.button, 1, 0, 1, 2)
         #                                      wiersz, kolumna, rowSpam, colSpan
         self.layout.addWidget(self.citylist, 2, 0, 1, 2)
-
+        self.citylist.itemPressed.connect(lambda item: print(item.data(Qt.UserRole)))
 
     def search(self, city):
 
@@ -47,7 +48,11 @@ class MainWidget (QWidget):
     def pullList(self, citiesData):
         self.citylist.clear()
         for name, latitude, longitude in citiesData:
-            self.citylist.addItem(QListWidgetItem(name))
+            item=QListWidgetItem(name)
+            item.setData(Qt.UserRole, (latitude, longitude))
+
+            self.citylist.addItem(item)
+
 
 
 
