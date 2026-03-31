@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QLabel, QGridLayout
+from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QLabel, QGridLayout, QMessageBox
 import requests
 
 
@@ -22,14 +22,20 @@ class MainWidget (QWidget):
 
 
     def search(self, city):
+
         request = requests.get(f"https://geocoding-api.open-meteo.com/v1/search?name={city}")
         data = request.json()
         print(data)
         print(request.status_code)
-        if request.status_code != 200:
-            return
-        print(data["results"])
-        for result in data["results"]:
-            output = f"{result["name"]}, {result["latitude"]}, {result["longitude"]}"
-            print(output)
+        try:
+            if request.status_code != 200:
+                raise Exception ("błąd ładowania strony")
+            if "results" not in data:
+                raise Exception ("nie znaleziono miasta")
+            data = data["results"]
+            for result in data:
+                output = f"{result["name"]}, {result["latitude"]}, {result["longitude"]}"
+                print(output)
+        except Exception as error:
+            QMessageBox.critical(self, "BŁĄD", str(error))
 
