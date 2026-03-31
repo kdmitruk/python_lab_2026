@@ -13,11 +13,12 @@ class MainWidget(QWidget):
         button.clicked.connect(searchWithArgument)
         layout = QGridLayout(self)
         layout.addWidget(QLabel("Miasto"), 0, 0)
-        layout.addWidget(self.edit, 0, 1)
+        layout.addWidget(edit, 0, 1)
         layout.addWidget(button, 1, 0, 1, 2)
-
-
 
     def search(self, city):
         r = requests.get(f'https://geocoding-api.open-meteo.com/v1/search?name={city}')
-        print(r.json())
+        results = r.json()
+        results = results["results"]
+        for result in results:
+            print(f"{result["name"]}: {result["latitude"]}, {result["longitude"]}")
