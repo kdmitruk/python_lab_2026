@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QGridLayout, QMessageBox, QListWidget, \
     QListWidgetItem
 import requests
@@ -13,6 +14,7 @@ class MainWidget(QWidget):
         button = QPushButton("OK")
         button.clicked.connect(searchWithArgument)
         self.cityList = QListWidget()
+        self.cityList.itemClicked.connect(self.load)
         layout = QGridLayout(self)
         layout.addWidget(QLabel("Miasto"), 0, 0)
         layout.addWidget(edit, 0, 1)
@@ -42,4 +44,10 @@ class MainWidget(QWidget):
         self.cityList.clear()
         for name, latitude, longitude in cities:
              item = QListWidgetItem(name)
+             item.setData(Qt.UserRole,(latitude,longitude))
              self.cityList.addItem(item)
+
+    def load(self, item):
+        name = item.text()
+        latitude, longitude = item.data(Qt.UserRole)
+        print(f"Nazwa: {name}; Długość: {latitude}; Szerokość: {longitude}")
