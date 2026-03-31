@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QLabel, QGridLayout, QMessageBox
+from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QLabel, QGridLayout, QMessageBox, QListWidget, QListWidgetItem
 import requests
 
 
@@ -15,10 +15,14 @@ class MainWidget (QWidget):
         self.button = QPushButton("Okay")
         self.button.clicked.connect(searchWithParameter)
 
+        self.citylist = QListWidget()
+
         self.layout = QGridLayout(self)
         self.layout.addWidget(QLabel("Miasto"), 0, 0)
         self.layout.addWidget(self.edit, 0, 1)
         self.layout.addWidget(self.button, 1, 0, 1, 2)
+        #                                      wiersz, kolumna, rowSpam, colSpan
+        self.layout.addWidget(self.citylist, 2, 0, 1, 2)
 
 
     def search(self, city):
@@ -33,9 +37,18 @@ class MainWidget (QWidget):
             if "results" not in data:
                 raise Exception ("nie znaleziono miasta")
             data = data["results"]
-            for result in data:
-                output = f"{result["name"]}, {result["latitude"]}, {result["longitude"]}"
-                print(output)
         except Exception as error:
             QMessageBox.critical(self, "BŁĄD", str(error))
+
+        citiesData = [(result["name"], result["latitude"], result["longitude"]) for result in data]
+        self.pullList(citiesData)
+
+
+    def pullList(self, citiesData):
+        self.citylist.clear()
+        for name, latitude, longitude in citiesData:
+            self.citylist.addItem(QListWidgetItem(name))
+
+
+
 
