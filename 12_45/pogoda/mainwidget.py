@@ -15,11 +15,13 @@ class MainWidget(QWidget):
         button.clicked.connect(searchWithArgument)
         self.cityList = QListWidget()
         self.cityList.itemClicked.connect(self.load)
+        self.weatherText = QLabel()
         layout = QGridLayout(self)
         layout.addWidget(QLabel("Miasto"), 0, 0)
         layout.addWidget(edit, 0, 1)
         layout.addWidget(button, 1, 0, 1, 2)
         layout.addWidget(self.cityList, 2, 0, 1, 2)
+        layout.addWidget(self.weatherText, 3, 0, 1, 2)
 
     def search(self, city):
         r = requests.get(f'https://geocoding-api.open-meteo.com/v1/search?name={city}')
@@ -48,6 +50,8 @@ class MainWidget(QWidget):
              self.cityList.addItem(item)
 
     def load(self, item):
-        name = item.text()
         latitude, longitude = item.data(Qt.UserRole)
-        print(f"Nazwa: {name}; Długość: {latitude}; Szerokość: {longitude}")
+        r = requests.get(f'https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m')
+        results = r.json()
+        temperature = results["current"]["temperature_2m"]
+        self.weatherText.setText(f"{temperature}")
