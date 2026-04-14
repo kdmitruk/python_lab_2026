@@ -7,6 +7,8 @@ class MainWidget (QWidget):
     def __init__(self, /):
         super().__init__()
 
+        self.weatherVariables = set()
+
         self.setWindowTitle("Pogoda")
 
         self.edit = QLineEdit("Lublin")
@@ -61,9 +63,11 @@ class MainWidget (QWidget):
 
         data = item.data(Qt.UserRole)
         latitude, longitude = data
-        request = requests.get(f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m")
+        variables = ",".join(self.weatherVariables)
+        request = requests.get(f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current={variables}")
         data = request.json()
-        temp = data["current"]["temperature_2m"]
+        print(data)
+        temp = "\n".join([f"{key} = {data["current"][key]}"for key in self.weatherVariables])
         self.weatherLabel.setText(f"{temp}")
 
     def execSettings(self):
