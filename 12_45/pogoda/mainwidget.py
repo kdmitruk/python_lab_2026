@@ -5,6 +5,7 @@ import requests
 from settingsdialog import SettingsDialog
 
 class MainWidget(QWidget):
+    avaiableVariables = ["temperature_2m","weather_code","pressure_msl"]
     def __init__(self, /):
         super().__init__()
         self.setWindowTitle("Pogoda")
@@ -62,3 +63,4 @@ class MainWidget(QWidget):
     def execSettings(self):
         dialog = SettingsDialog(self)
         dialog.exec()
+        print (dialog.result())
