@@ -1,3 +1,5 @@
+from difflib import restore
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QGridLayout, QMessageBox, QListWidget, \
     QListWidgetItem
@@ -5,7 +7,7 @@ import requests
 from settingsdialog import SettingsDialog
 
 class MainWidget(QWidget):
-    avaiableVariables = ["temperature_2m","weather_code","pressure_msl"]
+    avaiableVariables = ["temperature_2m","weather_code","pressure_msl","wind_speed_10m"]
     def __init__(self, /):
         super().__init__()
         self.setWindowTitle("Pogoda")
@@ -26,7 +28,7 @@ class MainWidget(QWidget):
         layout.addWidget(self.cityList, 2, 0, 1, 2)
         layout.addWidget(self.weatherText, 3, 0, 1, 2)
         layout.addWidget(settingsButton, 4, 0, 1, 2)
-
+        self.restoreVariables()
     def search(self, city):
         r = requests.get(f'https://geocoding-api.open-meteo.com/v1/search?name={city}')
         try:
@@ -61,6 +63,12 @@ class MainWidget(QWidget):
         self.weatherText.setText(f"{temperature}")
 
     def execSettings(self):
-        dialog = SettingsDialog(self)
+        dialog = SettingsDialog(self,self.weatherVariables)
         dialog.exec()
         print (dialog.result())
+
+    def restoreVariables(self):
+        self.weatherVariables = {}
+        for key in MainWidget.avaiableVariables :
+            self.weatherVariables[key] = False
+
