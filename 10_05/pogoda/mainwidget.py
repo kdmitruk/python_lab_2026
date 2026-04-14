@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSettings
 from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QLabel, QGridLayout, QMessageBox, QListWidget, QListWidgetItem
 import requests
 from settingsdialog import SettingsDialog
@@ -7,7 +7,7 @@ class MainWidget (QWidget):
     def __init__(self, /):
         super().__init__()
 
-        self.weatherVariables = set()
+        self.weatherVariables = self.restoreWeatherVariables()
 
         self.setWindowTitle("Pogoda")
 
@@ -74,7 +74,24 @@ class MainWidget (QWidget):
         settingsDialog.exec()
         if settingsDialog.result() == True:
             self.weatherVariables = settingsDialog.weatherVariables()
+            self.saveWeatherVariables()
         print(self.weatherVariables)
 
+    def saveWeatherVariables(self):
+        settings = QSettings()
 
+        settings.setValue("filters/weather_code", "weather_code" in self.weatherVariables )
+        settings.setValue("filters/temperature_2m", "temperature_2m" in self.weatherVariables )
+        settings.setValue("filters/pressure_msl", "pressure_msl" in self.weatherVariables )
 
+    def restoreWeatherVariables(self):
+        settings = QSettings()
+        weatherVariables = set()
+
+        if settings.value("filters/weather_code", False, type=bool):
+            weatherVariables.add("weather_code")
+        if settings.value("filters/temperature_2m", False, type=bool):
+            weatherVariables.add("temperature_2m")
+        if settings.value("filters/pressure_msl", False, type=bool):
+            weatherVariables.add("pressure_msl")
+        return weatherVariables
