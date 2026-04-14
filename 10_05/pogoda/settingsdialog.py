@@ -2,31 +2,39 @@ from PySide6.QtWidgets import QDialog, QCheckBox, QGridLayout, QDialogButtonBox
 
 
 class SettingsDialog(QDialog):
-    def __init__(self, parent):
+    def __init__(self, weatherVariables, parent):
         super().__init__(parent)
         self.setWindowTitle("Settings")
-        self.codeBox = QCheckBox("Weather code")
-        self.temperatureBox = QCheckBox("Temperature box")
-        self.pressureBox = QCheckBox("Pressure box")
+        codeBox = QCheckBox("Weather code")
+        temperatureBox = QCheckBox("Temperature box")
+        pressureBox = QCheckBox("Pressure box")
+
+        self.boxes = {
+            "weather_code": codeBox,
+            "temperature_2m": temperatureBox,
+            "pressure_msl": pressureBox
+        }
+
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
 
         self.layout = QGridLayout(self)
-        self.layout.addWidget(self.codeBox)
-        self.layout.addWidget(self.temperatureBox)
-        self.layout.addWidget(self.pressureBox)
+        self.layout.addWidget(codeBox)
+        self.layout.addWidget(temperatureBox)
+        self.layout.addWidget(pressureBox)
         self.layout.addWidget(buttonBox)
+
+        self.restoreVariables(weatherVariables)
 
     def weatherVariables(self):
         weatherVariables = set()
-        if self.temperatureBox.isChecked():
-            weatherVariables.add("temperature_2m")
-        if self.pressureBox.isChecked():
-            weatherVariables.add("pressure_msl")
-        if self.codeBox.isChecked():
-            weatherVariables.add("weather_code")
+        for key, checkbox in self.boxes.items():
+            if checkbox.isChecked():
+                weatherVariables.add(key)
         return weatherVariables
 
-
+    def restoreVariables(self, variables):
+        for key, checkbox in self.boxes.items():
+            checkbox.setChecked(key in variables)

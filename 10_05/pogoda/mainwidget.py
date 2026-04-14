@@ -60,7 +60,6 @@ class MainWidget (QWidget):
             self.citylist.addItem(item)
 
     def showWeather(self, item):
-
         data = item.data(Qt.UserRole)
         latitude, longitude = data
         variables = ",".join(self.weatherVariables)
@@ -71,7 +70,7 @@ class MainWidget (QWidget):
         self.weatherLabel.setText(f"{temp}")
 
     def execSettings(self):
-        settingsDialog = SettingsDialog(self)
+        settingsDialog = SettingsDialog(self.weatherVariables, self)
         settingsDialog.exec()
         if settingsDialog.result() == True:
             self.weatherVariables = settingsDialog.weatherVariables()
