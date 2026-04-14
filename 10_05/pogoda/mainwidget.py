@@ -18,13 +18,16 @@ class MainWidget (QWidget):
 
         self.citylist = QListWidget()
 
+        self.weatherLabel = QLabel()
+
         self.layout = QGridLayout(self)
         self.layout.addWidget(QLabel("Miasto"), 0, 0)
         self.layout.addWidget(self.edit, 0, 1)
         self.layout.addWidget(self.button, 1, 0, 1, 2)
         #                                      wiersz, kolumna, rowSpam, colSpan
         self.layout.addWidget(self.citylist, 2, 0, 1, 2)
-        self.citylist.itemPressed.connect(lambda item: print(item.data(Qt.UserRole)))
+        self.layout.addWidget(self.weatherLabel, 3, 0, 1, 2)
+        self.citylist.itemPressed.connect(self.showWeather)
 
     def search(self, city):
 
@@ -50,9 +53,16 @@ class MainWidget (QWidget):
         for name, latitude, longitude in citiesData:
             item=QListWidgetItem(name)
             item.setData(Qt.UserRole, (latitude, longitude))
-
             self.citylist.addItem(item)
 
+    def showWeather(self, item):
+
+        data = item.data(Qt.UserRole)
+        latitude, longitude = data
+        request = requests.get(f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m")
+        data = request.json()
+        temp = data["current"]["temperature_2m"]
+        self.weatherLabel.setText(f"{temp}")
 
 
 
