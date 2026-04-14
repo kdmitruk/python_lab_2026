@@ -19,6 +19,14 @@ class SettingsDialog(QDialog):
         self.layout.addWidget(self.pressureBox)
         self.layout.addWidget(buttonBox)
 
-
+    def weatherVariables(self):
+        weatherVariables = set()
+        if self.temperatureBox.isChecked():
+            weatherVariables.add("temperature_2m")
+        if self.pressureBox.isChecked():
+            weatherVariables.add("pressure_msl")
+        if self.codeBox.isChecked():
+            weatherVariables.add("weather_code")
+        return weatherVariables
 
 

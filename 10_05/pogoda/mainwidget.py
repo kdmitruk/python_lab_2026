@@ -69,7 +69,9 @@ class MainWidget (QWidget):
     def execSettings(self):
         settingsDialog = SettingsDialog(self)
         settingsDialog.exec()
-
+        if settingsDialog.result() == True:
+            self.weatherVariables = settingsDialog.weatherVariables()
+        print(self.weatherVariables)
 
 
 
