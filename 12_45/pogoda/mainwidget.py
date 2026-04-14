@@ -57,15 +57,19 @@ class MainWidget(QWidget):
 
     def load(self, item):
         latitude, longitude = item.data(Qt.UserRole)
-        r = requests.get(f'https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m')
+        variables = ",".join([key for key, value in self.weatherVariables.items() if value])
+        r = requests.get(f'https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current={variables}')
         results = r.json()
-        temperature = results["current"]["temperature_2m"]
-        self.weatherText.setText(f"{temperature}")
+        results = results["current"]
+        text = "\n".join([f"{key} = {results[key]}" for key, value in self.weatherVariables.items() if value])
+        self.weatherText.setText(text)
 
     def execSettings(self):
         dialog = SettingsDialog(self,self.weatherVariables)
         dialog.exec()
-        print (dialog.result())
+        print(dialog.result())
+        if dialog.result():
+            self.weatherVariables = dialog.weatherVariables()
 
     def restoreVariables(self):
         self.weatherVariables = {}
