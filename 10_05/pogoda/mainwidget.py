@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QLineEdit, QPushButton, QLabel, QGridLayout, QMessageBox, QListWidget, QListWidgetItem
 import requests
-
+from settingsdialog import SettingsDialog
 
 class MainWidget (QWidget):
     def __init__(self, /):
@@ -19,6 +19,8 @@ class MainWidget (QWidget):
         self.citylist = QListWidget()
 
         self.weatherLabel = QLabel()
+        self.settingsButon = QPushButton("Settings")
+        self.settingsButon.clicked.connect(self.execSettings)
 
         self.layout = QGridLayout(self)
         self.layout.addWidget(QLabel("Miasto"), 0, 0)
@@ -28,7 +30,7 @@ class MainWidget (QWidget):
         self.layout.addWidget(self.citylist, 2, 0, 1, 2)
         self.layout.addWidget(self.weatherLabel, 3, 0, 1, 2)
         self.citylist.itemPressed.connect(self.showWeather)
-
+        self.layout.addWidget(self.settingsButon,4,0,1,2)
     def search(self, city):
 
         request = requests.get(f"https://geocoding-api.open-meteo.com/v1/search?name={city}")
@@ -63,6 +65,10 @@ class MainWidget (QWidget):
         data = request.json()
         temp = data["current"]["temperature_2m"]
         self.weatherLabel.setText(f"{temp}")
+
+    def execSettings(self):
+        settingsDialog = SettingsDialog(self)
+        settingsDialog.exec()
 
 
 
