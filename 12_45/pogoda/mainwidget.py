@@ -1,6 +1,6 @@
 from difflib import restore
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSettings
 from PySide6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QGridLayout, QMessageBox, QListWidget, \
     QListWidgetItem
 import requests
@@ -70,9 +70,13 @@ class MainWidget(QWidget):
         print(dialog.result())
         if dialog.result():
             self.weatherVariables = dialog.weatherVariables()
+            settings = QSettings()
+            for key, value in self.weatherVariables.items():
+                settings.setValue(f"filters/{key}", value)
 
     def restoreVariables(self):
         self.weatherVariables = {}
+        settings = QSettings()
         for key in MainWidget.avaiableVariables :
-            self.weatherVariables[key] = False
+            self.weatherVariables[key] = settings.value(f"filters/{key}", False, type = bool)
 
