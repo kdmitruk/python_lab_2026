@@ -27,19 +27,21 @@ def main():
     hourly = data["hourly"]
     time = hourly["time"]
     time = [datetime.strptime(hour, format) for hour in time]
-    draw(time, hourly["temperature_2m"], hourly["apparent_temperature"])
+    draw(time, hourly["temperature_2m"], hourly["apparent_temperature"],hourly["precipitation"])
 
 
-def draw(time, temperature_2m, apparent_temperature):
-    plt.figure(figsize=(10, 5))
-    plt.title("Wykres")
+def draw(time, temperature_2m, apparent_temperature,precipitation):
+    _,axes = plt.subplots(2 ,1 ,figsize=(10, 10),sharex=True)
+    ax_temp , ax_rain = axes
+    ax_temp.set_ylabel("Temperatura")
     plt.xlabel("Czas")
-    plt.ylabel("Temperatura")
-    # plt.xticks(rotation=20)
-    plt.grid()
-    plt.plot(time, temperature_2m, label = "temperatura")
-    plt.plot(time, apparent_temperature, color = "red", label = "temperatura odczuwalna")
-    plt.legend()
+    ax_rain.set_ylabel("Wysokość")
+    ax_temp.plot(time, temperature_2m, label = "temperatura")
+    ax_temp.plot(time, apparent_temperature, color = "red", label = "temperatura odczuwalna")
+    ax_rain.bar(time, precipitation, color="blue", label="opad")
+    for ax in axes:
+        ax.grid()
+        ax.legend()
     plt.show()
 
 if __name__ == '__main__':
