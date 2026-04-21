@@ -1,6 +1,9 @@
 import requests
+import datetime
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
+
+format = "%Y-%m-%dT%H:%M"
 
 def main():
     latitude = 51.25
@@ -23,15 +26,17 @@ def main():
 
     print(data["daily"])
     print(data["hourly"])
-    draw(data['hourly']['temperature_2m'])
+    draw( data['hourly']['time'] , data['hourly']['temperature_2m'])
 
-def draw(temps):
+def draw(hours, temps):
     plt.figure(figsize=(10, 5))
 
     xs = [0, 1]
     ys = [0, 1]
 
-    plt.plot(range(0, len(temps)), temps, color="g")
+    hours = [datetime.strptime(hour, format) for hour in hours]
+
+    plt.plot(hours, temps, color="g")
 
     plt.title("wykres")
     plt.xlabel("X")
