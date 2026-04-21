@@ -26,22 +26,22 @@ def main():
 
     print(data["daily"])
     print(data["hourly"])
-    draw( data['hourly']['time'] , data['hourly']['temperature_2m'])
+    draw(data['hourly']['time'] , data['hourly']['temperature_2m'], data['hourly']['apparent_temperature'])
 
-def draw(hours, temps):
+def draw(hours, temps, app_temps):
     plt.figure(figsize=(10, 5))
-
-    xs = [0, 1]
-    ys = [0, 1]
 
     hours = [datetime.strptime(hour, format) for hour in hours]
 
-    plt.plot(hours, temps, color="g")
+    plt.plot(hours, temps, color="g", label="temperatura")
+    plt.plot(hours, app_temps, color="r", marker=".", label="temperatura odczuwalna")
 
     plt.title("wykres")
     plt.xlabel("X")
     plt.ylabel("Y")
+    plt.xticks(rotation=20)
     plt.grid()
+    plt.legend()
 
     plt.show()
 
