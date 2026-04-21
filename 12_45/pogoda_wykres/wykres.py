@@ -2,6 +2,8 @@ import requests
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
+format = "%Y-%m-%dT%H:%M"
+
 def main():
     latitude = 51.25
     longitude = 22.57
@@ -23,16 +25,18 @@ def main():
 
     daily = data["daily"]
     hourly = data["hourly"]
-    draw(hourly["temperature_2m"])
+    time = hourly["time"]
+    time = [datetime.strptime(hour, format) for hour in time]
+    draw(time, hourly["temperature_2m"])
 
 
-def draw(temperature_2m):
+def draw(time, temperature_2m):
     plt.figure(figsize=(10, 5))
     plt.title("Wykres")
-    plt.xlabel("x")
-    plt.ylabel("y")
+    plt.xlabel("Czas")
+    plt.ylabel("Temperatura")
     plt.grid()
-    plt.plot(range(len(temperature_2m)), temperature_2m)
+    plt.plot(time, temperature_2m)
     plt.show()
 
 if __name__ == '__main__':
