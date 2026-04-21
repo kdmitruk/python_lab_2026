@@ -23,16 +23,16 @@ def main():
 
     daily = data["daily"]
     hourly = data["hourly"]
-    draw()
+    draw(hourly["temperature_2m"])
 
 
-def draw():
+def draw(temperature_2m):
     plt.figure(figsize=(10, 5))
     plt.title("Wykres")
     plt.xlabel("x")
     plt.ylabel("y")
     plt.grid()
-    plt.plot([0, 0.2, 1], [0, 5, 1])
+    plt.plot(range(len(temperature_2m)), temperature_2m)
     plt.show()
 
 if __name__ == '__main__':
