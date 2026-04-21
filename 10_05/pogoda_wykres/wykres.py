@@ -24,24 +24,30 @@ def main():
     response = requests.get(url)
     data = response.json()
 
+    hourly=data['hourly']
     print(data["daily"])
     print(data["hourly"])
-    draw(data['hourly']['time'] , data['hourly']['temperature_2m'], data['hourly']['apparent_temperature'])
+    draw(hourly['time'] , hourly['temperature_2m'], hourly['apparent_temperature'],hourly['precipitation'])
 
-def draw(hours, temps, app_temps):
-    plt.figure(figsize=(10, 5))
+def draw(hours, temps, app_temps,prec):
+    #plt.figure(figsize=(10, 5))
+    _, axes = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+
+    temp_ax, rain_ax = axes
 
     hours = [datetime.strptime(hour, format) for hour in hours]
 
-    plt.plot(hours, temps, color="g", label="temperatura")
-    plt.plot(hours, app_temps, color="r", marker=".", label="temperatura odczuwalna")
+    temp_ax.plot(hours, temps, color="g", label="temperatura")
+    temp_ax.plot(hours, app_temps, color="r", marker=".", label="temperatura odczuwalna")
+    rain_ax.bar(hours,prec,color='b',label="opad")
 
-    plt.title("wykres")
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    plt.xticks(rotation=20)
-    plt.grid()
-    plt.legend()
+    for ax in axes:
+        ax.set_xlabel("Czas")
+        ax.grid()
+        ax.legend()
+
+    temp_ax.set_ylabel("Temperatura C")
+    rain_ax.set_ylabel("Opad mm")
 
     plt.show()
 
