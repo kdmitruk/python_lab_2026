@@ -27,16 +27,19 @@ def main():
     hourly = data["hourly"]
     time = hourly["time"]
     time = [datetime.strptime(hour, format) for hour in time]
-    draw(time, hourly["temperature_2m"])
+    draw(time, hourly["temperature_2m"], hourly["apparent_temperature"])
 
 
-def draw(time, temperature_2m):
+def draw(time, temperature_2m, apparent_temperature):
     plt.figure(figsize=(10, 5))
     plt.title("Wykres")
     plt.xlabel("Czas")
     plt.ylabel("Temperatura")
+    # plt.xticks(rotation=20)
     plt.grid()
-    plt.plot(time, temperature_2m)
+    plt.plot(time, temperature_2m, label = "temperatura")
+    plt.plot(time, apparent_temperature, color = "red", label = "temperatura odczuwalna")
+    plt.legend()
     plt.show()
 
 if __name__ == '__main__':
