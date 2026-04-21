@@ -25,21 +25,29 @@ def main():
     data = response.json()
 
     hourly=data['hourly']
+    daily = data["daily"]
     print(data["daily"])
     print(data["hourly"])
-    draw(hourly['time'] , hourly['temperature_2m'], hourly['apparent_temperature'],hourly['precipitation'])
+    draw(hourly['time'] , hourly['temperature_2m'], hourly['apparent_temperature'],hourly['precipitation'],daily['sunrise'],daily['sunset'])
 
-def draw(hours, temps, app_temps,prec):
+def draw(hours, temps, app_temps,prec,sunrise,sunset):
     #plt.figure(figsize=(10, 5))
     _, axes = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
 
     temp_ax, rain_ax = axes
 
     hours = [datetime.strptime(hour, format) for hour in hours]
+    sunset = [datetime.strptime(hour,format) for hour in sunset]
+    sunrise = [datetime.strptime(hour, format) for hour in sunrise]
+
+    for i in range(len(sunset)-1):
+        #temp_ax.axvspan(sunrise[i],sunset[i],color='y', alpha=0.2)
+        temp_ax.axvspan(sunset[i],sunrise[i+1],color='k', alpha=0.2)
 
     temp_ax.plot(hours, temps, color="g", label="temperatura")
     temp_ax.plot(hours, app_temps, color="r", marker=".", label="temperatura odczuwalna")
     rain_ax.bar(hours,prec,color='b',label="opad")
+
 
     for ax in axes:
         ax.set_xlabel("Czas")
