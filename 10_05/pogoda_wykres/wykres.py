@@ -57,6 +57,8 @@ def draw(hours, temps, app_temps,prec,sunrise,sunset):
     temp_ax.set_ylabel("Temperatura C")
     rain_ax.set_ylabel("Opad mm")
 
+    plt.savefig("out.png")
+
     plt.show()
 
 if __name__ == '__main__':
