@@ -31,7 +31,8 @@ class PolandMap:
         self._world = gpd.read_file(self.shapefile_url)
         self.poland = self._world[self._world['ADMIN'] == 'Poland']
 
-        self.fig, self.ax = plt.subplots(figsize=(8, 8))
+        self.fig, (self.ax, self.temp_ax) = plt.subplots(1,2, figsize=(16, 6))
+        self.temp_ax.grid()
         self.forecast = self.get_forecast()
         self.current_index=0
 
@@ -39,16 +40,19 @@ class PolandMap:
         self.poland.plot(ax=self.ax, color='lightgrey', edgecolor='black')
         self.draw_cities()
         self.draw_city_names()
+        self.draw_temp()
 
     def draw_cities(self):
         x = []
         y = []
+        colors = []
 
         for name, position in cities.items():
             x.append(position[1])
             y.append(position[0])
+            colors.append(self.forecast[name][self.current_index])
 
-        self.ax.scatter(x, y)
+        self.ax.scatter(x, y,c=colors,cmap="coolwarm")
 
     def draw_city_names(self):
         offset = mtransforms.ScaledTranslation(0, -0.4, plt.gcf().dpi_scale_trans)
@@ -83,6 +87,9 @@ class PolandMap:
             forecast[name]=data[i]["hourly"]["temperature_2m"]
 
         return forecast
+
+    def draw_temp(self):
+        self.temp_ax.plot(range(len(self.forecast["Warszawa"])), self.forecast["Warszawa"], label="temperatura")
 
 if __name__ == '__main__':
     poland = PolandMap()
