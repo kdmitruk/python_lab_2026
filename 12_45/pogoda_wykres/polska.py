@@ -57,6 +57,7 @@ class PolandMap:
             self.ax.text(position[1], position[0], label, horizontalalignment="center",
                     transform=self.ax.transData + offset,
                     bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2))
+
     def get_forecast(self):
         start_date = datetime.now().date()
         end_date = start_date + timedelta(days=7)
