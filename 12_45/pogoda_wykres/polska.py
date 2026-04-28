@@ -1,3 +1,6 @@
+import math
+from functools import cmp_to_key
+
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import matplotlib.transforms as mtransforms
@@ -35,11 +38,13 @@ class PolandMap:
         self.fig.canvas.mpl_connect('button_press_event', self.on_click)
         self.forecast = self.get_forecast()
         self.current_index=0
+        self.current_city = "Warszawa"
 
     def draw(self):
         self.ax.clear()
         self.temp_ax.clear()
         self.temp_ax.grid()
+        self.fig.suptitle(self.current_city)
         self.poland.plot(ax=self.ax, color='lightgrey', edgecolor='black')
         self.draw_cities()
         self.draw_city_names()
@@ -92,12 +97,33 @@ class PolandMap:
         return forecast
 
     def draw_temp(self):
-        self.temp_ax.plot(range(len(self.forecast["Warszawa"])), self.forecast["Warszawa"], label="temperatura")
+        self.temp_ax.plot(range(len(self.forecast[self.current_city])), self.forecast[self.current_city], label="temperatura")
 
     def on_click(self, event):
-        if event.inaxes == self.temp_ax:
-            self.current_index = round(event.xdata)
-            self.draw()
+        match event.inaxes:
+            case self.temp_ax:
+                self.current_index = round(event.xdata)
+                self.draw()
+            case self.ax:
+                self.current_city = self.closest_city(event.ydata, event.xdata)
+                self.draw()
+
+    def closest_city(self, x0, y0):
+        def compare_distances(name1, name2):
+            x1, y1 = cities[name1]
+            x2, y2 = cities[name2]
+            dist1 = math.hypot(x1 - x0, y1 - y0)
+            dist2 = math.hypot(x2 - x0, y2 - y0)
+            if dist1 < dist2:
+                return -1
+            elif dist2 < dist1:
+                return 1
+            else:
+                return 0
+
+        names = list(cities.keys())
+        names.sort(key = cmp_to_key(compare_distances))
+        return names[0]
 
 if __name__ == '__main__':
     poland = PolandMap()
