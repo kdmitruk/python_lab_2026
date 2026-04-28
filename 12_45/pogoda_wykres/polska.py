@@ -32,11 +32,14 @@ class PolandMap:
         self.poland = self._world[self._world['ADMIN'] == 'Poland']
 
         self.fig, (self.ax, self.temp_ax) = plt.subplots(1,2, figsize=(16, 6))
-        self.temp_ax.grid()
+        self.fig.canvas.mpl_connect('button_press_event', self.on_click)
         self.forecast = self.get_forecast()
         self.current_index=0
 
     def draw(self):
+        self.ax.clear()
+        self.temp_ax.clear()
+        self.temp_ax.grid()
         self.poland.plot(ax=self.ax, color='lightgrey', edgecolor='black')
         self.draw_cities()
         self.draw_city_names()
@@ -59,8 +62,8 @@ class PolandMap:
         for name, position in cities.items():
             label = (f"{name}\n{self.forecast[name][self.current_index]}")
             self.ax.text(position[1], position[0], label, horizontalalignment="center",
-                    transform=self.ax.transData + offset,
-                    bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2))
+                         transform=self.ax.transData + offset,
+                         bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2))
 
     def get_forecast(self):
         start_date = datetime.now().date()
@@ -90,6 +93,11 @@ class PolandMap:
 
     def draw_temp(self):
         self.temp_ax.plot(range(len(self.forecast["Warszawa"])), self.forecast["Warszawa"], label="temperatura")
+
+    def on_click(self, event):
+        if event.inaxes == self.temp_ax:
+            self.current_index = round(event.xdata)
+            self.draw()
 
 if __name__ == '__main__':
     poland = PolandMap()
