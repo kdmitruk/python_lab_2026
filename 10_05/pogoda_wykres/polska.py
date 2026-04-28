@@ -25,42 +25,52 @@ cities = {
 
 class PolandMap:
     def __init__(self, shapefile_url=None):
+        self.current_index = 0
         default_url = 'https://naciscdn.org/naturalearth/50m/cultural/ne_50m_admin_0_countries.zip'
         self.shapefile_url = shapefile_url or default_url
         self._world = gpd.read_file(self.shapefile_url)
         self.poland = self._world[self._world['ADMIN'] == 'Poland']
+        self.forecast = self.get_forecast()
 
-    def draw(self, forecast):
+    def draw(self):
         fig, (ax, temp_ax) = plt.subplots(1, 2, figsize=(16, 6))
         self.poland.plot(ax=ax, color='lightgrey', edgecolor='black')
-        self.draw_cities(ax,forecast)
-        self.draw_city_labels(ax, forecast)
-        self.draw_temp(temp_ax, forecast)
+        self.draw_cities(ax)
+        self.draw_city_labels(ax)
+        self.draw_temp(temp_ax)
+        fig.canvas.mpl_connect('button_press_event', self.on_temperature_click)
+        fig.canvas.draw()
 
 
-    def draw_cities(self, ax,forecast):
+    def draw_cities(self, ax):
         xs = []
         ys = []
         colors = []
         for name, pos in cities.items():
             xs.append(pos[1])
             ys += [pos[0]]
-            colors.append(forecast[name][0])
+            colors.append(self.forecast[name][self.current_index])
         ax.scatter(xs,ys,c = colors,cmap="coolwarm")
 
-    def draw_city_labels(self, ax, forecast):
+    def draw_city_labels(self, ax):
         offset = mtransforms.ScaledTranslation(0, -0.4, plt.gcf().dpi_scale_trans)
 
         for name, pos in cities.items():
-            label = f"{name}\n{forecast[name][0]}"
+            label = f"{name}\n{self.forecast[name][self.current_index]}"
             ax.text(pos[1], pos[0], label,
                     horizontalalignment="center",
                     transform=ax.transData + offset,
                     bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2)
                     )
 
-    def draw_temp(self, ax, forecast):
-        ax.plot(range(len(forecast['Lublin'])), forecast['Lublin'])
+    def draw_temp(self, ax):
+        ax.plot(range(len(self.forecast['Lublin'])), self.forecast['Lublin'])
+
+    def on_temperature_click(self, event):
+        self.current_index = round(event.xdata)
+        self.draw()
+        print(event, event.canvas)
+
 
     def get_forecast(self):
         start_date = datetime.now().date()
@@ -95,6 +105,6 @@ class PolandMap:
 
 if __name__ == '__main__':
     poland = PolandMap()
-    poland.draw(poland.get_forecast())
+    poland.draw()
     plt.show()
 
