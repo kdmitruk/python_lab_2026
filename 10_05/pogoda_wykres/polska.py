@@ -33,20 +33,22 @@ class PolandMap:
     def draw(self, forecast):
         fig, ax = plt.subplots(figsize=(8, 8))
         self.poland.plot(ax=ax, color='lightgrey', edgecolor='black')
-        self.draw_cities(ax)
+        self.draw_cities(ax,forecast)
         self.draw_city_labels(ax, forecast)
 
 
-    def draw_cities(self, ax):
+    def draw_cities(self, ax,forecast):
         xs = []
         ys = []
-        for city in cities.values():
-            xs.append(city[1])
-            ys += [city[0]]
-        ax.scatter(xs,ys)
+        colors = []
+        for name, pos in cities.items():
+            xs.append(pos[1])
+            ys += [pos[0]]
+            colors.append(forecast[name])
+        ax.scatter(xs,ys,c = colors,cmap="coolwarm")
 
     def draw_city_labels(self, ax, forecast):
-        offset = mtransforms.ScaledTranslation(0, -0.3, plt.gcf().dpi_scale_trans)
+        offset = mtransforms.ScaledTranslation(0, -0.4, plt.gcf().dpi_scale_trans)
 
         for name, pos in cities.items():
             label = f"{name}\n{forecast[name]}"
