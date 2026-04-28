@@ -32,14 +32,20 @@ class PolandMap:
         self.poland = self._world[self._world['ADMIN'] == 'Poland']
         self.forecast = self.get_forecast()
 
+        self.fig, (self.ax, self.temp_ax) = plt.subplots(1, 2, figsize=(16, 6))
+        self.fig.canvas.mpl_connect('button_press_event', self.on_temperature_click)
+
     def draw(self):
-        fig, (ax, temp_ax) = plt.subplots(1, 2, figsize=(16, 6))
-        self.poland.plot(ax=ax, color='lightgrey', edgecolor='black')
-        self.draw_cities(ax)
-        self.draw_city_labels(ax)
-        self.draw_temp(temp_ax)
-        fig.canvas.mpl_connect('button_press_event', self.on_temperature_click)
-        fig.canvas.draw()
+
+
+        self.ax.clear()
+        self.temp_ax.clear()
+
+        self.poland.plot(ax=self.ax, color='lightgrey', edgecolor='black')
+        self.draw_cities(self.ax)
+        self.draw_city_labels(self.ax)
+        self.draw_temp(self.temp_ax)
+        self.fig.canvas.draw()
 
 
     def draw_cities(self, ax):
