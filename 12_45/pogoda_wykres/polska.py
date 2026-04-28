@@ -1,6 +1,9 @@
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import matplotlib.transforms as mtransforms
+from datetime import datetime,timedelta
+
+import requests
 
 cities = {
     "Warszawa": (52.2297, 21.0122),
@@ -29,6 +32,7 @@ class PolandMap:
         self.poland = self._world[self._world['ADMIN'] == 'Poland']
 
         self.fig, self.ax = plt.subplots(figsize=(8, 8))
+        self.forecast = self.get_forecast()
 
     def draw(self):
         self.poland.plot(ax=self.ax, color='lightgrey', edgecolor='black')
@@ -51,7 +55,27 @@ class PolandMap:
             self.ax.text(position[1], position[0], name, horizontalalignment="center",
                     transform=self.ax.transData + offset,
                     bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2))
+    def get_forecast(self):
+        start_date = datetime.now().date()
+        end_date = start_date + timedelta(days=7)
+        x = []
+        y = []
+        for position in cities.values():
+            x.append(str(position[0]))
+            y.append(str(position[1]))
 
+        latitude= ','.join(x)
+        longitude = ','.join(y)
+        url = (
+            f"https://api.open-meteo.com/v1/forecast?"
+            f"latitude={latitude}&longitude={longitude}"
+            f"&hourly=temperature_2m"
+            f"&start_date={start_date}&end_date={end_date}"
+            f"&timezone=Europe/Warsaw"
+        )
+        response = requests.get(url)
+        data = response.json()
+        print(data)
 
 if __name__ == '__main__':
     poland = PolandMap()
