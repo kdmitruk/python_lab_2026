@@ -31,10 +31,11 @@ class PolandMap:
         self.poland = self._world[self._world['ADMIN'] == 'Poland']
 
     def draw(self, forecast):
-        fig, ax = plt.subplots(figsize=(8, 8))
+        fig, (ax, temp_ax) = plt.subplots(1, 2, figsize=(16, 6))
         self.poland.plot(ax=ax, color='lightgrey', edgecolor='black')
         self.draw_cities(ax,forecast)
         self.draw_city_labels(ax, forecast)
+        self.draw_temp(temp_ax, forecast)
 
 
     def draw_cities(self, ax,forecast):
@@ -44,19 +45,22 @@ class PolandMap:
         for name, pos in cities.items():
             xs.append(pos[1])
             ys += [pos[0]]
-            colors.append(forecast[name])
+            colors.append(forecast[name][0])
         ax.scatter(xs,ys,c = colors,cmap="coolwarm")
 
     def draw_city_labels(self, ax, forecast):
         offset = mtransforms.ScaledTranslation(0, -0.4, plt.gcf().dpi_scale_trans)
 
         for name, pos in cities.items():
-            label = f"{name}\n{forecast[name]}"
+            label = f"{name}\n{forecast[name][0]}"
             ax.text(pos[1], pos[0], label,
                     horizontalalignment="center",
                     transform=ax.transData + offset,
                     bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2)
                     )
+
+    def draw_temp(self, ax, forecast):
+        ax.plot(range(len(forecast['Lublin'])), forecast['Lublin'])
 
     def get_forecast(self):
         start_date = datetime.now().date()
@@ -84,7 +88,7 @@ class PolandMap:
         keys = list(cities.keys())
         forecast = {}
         for i, city in enumerate(data):
-            forecast[keys[i]] = city["hourly"]["temperature_2m"][0]
+            forecast[keys[i]] = city["hourly"]["temperature_2m"]
 
         return forecast
 
