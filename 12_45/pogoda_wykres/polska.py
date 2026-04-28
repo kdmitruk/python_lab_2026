@@ -31,6 +31,17 @@ class PolandMap:
 
     def draw(self):
         self.poland.plot(ax=self.ax, color='lightgrey', edgecolor='black')
+        self.draw_cities()
+
+    def draw_cities(self):
+        x = []
+        y = []
+
+        for name, position in cities.items():
+            x.append(position[1])
+            y.append(position[0])
+
+        self.ax.scatter(x, y)
 
 if __name__ == '__main__':
     poland = PolandMap()
