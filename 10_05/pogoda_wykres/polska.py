@@ -30,11 +30,12 @@ class PolandMap:
         self._world = gpd.read_file(self.shapefile_url)
         self.poland = self._world[self._world['ADMIN'] == 'Poland']
 
-    def draw(self):
+    def draw(self, forecast):
         fig, ax = plt.subplots(figsize=(8, 8))
         self.poland.plot(ax=ax, color='lightgrey', edgecolor='black')
         self.draw_cities(ax)
-        self.draw_city_labels(ax)
+        self.draw_city_labels(ax, forecast)
+
 
     def draw_cities(self, ax):
         xs = []
@@ -44,10 +45,12 @@ class PolandMap:
             ys += [city[0]]
         ax.scatter(xs,ys)
 
-    def draw_city_labels(self, ax):
+    def draw_city_labels(self, ax, forecast):
         offset = mtransforms.ScaledTranslation(0, -0.3, plt.gcf().dpi_scale_trans)
+
         for name, pos in cities.items():
-            ax.text(pos[1], pos[0], name,
+            label = f"{name}\n{forecast[name]}"
+            ax.text(pos[1], pos[0], label,
                     horizontalalignment="center",
                     transform=ax.transData + offset,
                     bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2)
@@ -76,12 +79,16 @@ class PolandMap:
         )
         response = requests.get(url)
         data = response.json()
-        for city in data:
-            print(city["hourly"]["temperature_2m"][0])
+        keys = list(cities.keys())
+        forecast = {}
+        for i, city in enumerate(data):
+            forecast[keys[i]] = city["hourly"]["temperature_2m"][0]
+
+        return forecast
+
 
 if __name__ == '__main__':
     poland = PolandMap()
-    poland.get_forecast()
-    poland.draw()
+    poland.draw(poland.get_forecast())
     plt.show()
 
