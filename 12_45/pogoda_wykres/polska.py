@@ -1,5 +1,6 @@
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import matplotlib.transforms as mtransforms
 
 cities = {
     "Warszawa": (52.2297, 21.0122),
@@ -32,6 +33,7 @@ class PolandMap:
     def draw(self):
         self.poland.plot(ax=self.ax, color='lightgrey', edgecolor='black')
         self.draw_cities()
+        self.draw_city_names()
 
     def draw_cities(self):
         x = []
@@ -42,6 +44,14 @@ class PolandMap:
             y.append(position[0])
 
         self.ax.scatter(x, y)
+
+    def draw_city_names(self):
+        offset = mtransforms.ScaledTranslation(0, -0.4, plt.gcf().dpi_scale_trans)
+        for name, position in cities.items():
+            self.ax.text(position[1], position[0], name, horizontalalignment="center",
+                    transform=self.ax.transData + offset,
+                    bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2))
+
 
 if __name__ == '__main__':
     poland = PolandMap()
