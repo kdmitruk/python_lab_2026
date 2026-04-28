@@ -33,6 +33,7 @@ class PolandMap:
 
         self.fig, self.ax = plt.subplots(figsize=(8, 8))
         self.forecast = self.get_forecast()
+        self.current_index=0
 
     def draw(self):
         self.poland.plot(ax=self.ax, color='lightgrey', edgecolor='black')
@@ -52,7 +53,8 @@ class PolandMap:
     def draw_city_names(self):
         offset = mtransforms.ScaledTranslation(0, -0.4, plt.gcf().dpi_scale_trans)
         for name, position in cities.items():
-            self.ax.text(position[1], position[0], name, horizontalalignment="center",
+            label = (f"{name}\n{self.forecast[name][self.current_index]}")
+            self.ax.text(position[1], position[0], label, horizontalalignment="center",
                     transform=self.ax.transData + offset,
                     bbox = dict(boxstyle = "Round,pad=0.2", fc = "white", alpha = 0.2))
     def get_forecast(self):
@@ -75,7 +77,11 @@ class PolandMap:
         )
         response = requests.get(url)
         data = response.json()
-        print(data)
+        forecast={}
+        for i,name in enumerate(cities):
+            forecast[name]=data[i]["hourly"]["temperature_2m"]
+
+        return forecast
 
 if __name__ == '__main__':
     poland = PolandMap()
