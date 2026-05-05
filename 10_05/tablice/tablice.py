@@ -1,3 +1,4 @@
+import math
 from pickletools import uint8
 
 import numpy as np
@@ -74,7 +75,13 @@ def zadanie9():
     plt.imshow(arr, cmap="gray", vmin=0, vmax=255)
     plt.show()
 
+def zadanie10():
+    x=np.linspace(0, 2 * math.pi * 50, 1000)
+    y=np.sin(x)
+    plt.plot(x,y)
+    plt.show()
+
 if __name__ == '__main__':
     #zadanie3i4(zadanie3(), zadanie4())
     # zadanie5(150, 1.8)
-    zadanie9()
+    zadanie10()
