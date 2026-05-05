@@ -57,11 +57,17 @@ def zad7(image,top,left,bottom,right):
 def zad8(image):
     return 255 - image
 
+def zad9():
+    arr = np.linspace(0,255,100)
+    arr = np.tile(arr,(100,1))
+    return arr
+
 if __name__ == '__main__':
    # zad1()
-   #  zad2()
-   #  zad3()
+   # zad2()
+   # zad3()
    # show(*zad5(zad3(),-50,1.5))
    # show(*zad6(zad3(),100,150))
    # show(zad7(zad3(),10,20,30,40))
-    show(zad8(zad7(zad3(),10,20,30,40)))
+   # show(zad8(zad7(zad3(),10,20,30,40)))
+    show(zad9())
