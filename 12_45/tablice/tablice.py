@@ -44,9 +44,17 @@ def zad5(image,brightness,contrast):
 
     return image,image1, image2
 
+def zad6(image,low,high):
+    image1 = image.copy()
+    image1[image < low] = low
+    image1[image > high] = high
+    return image,image1
+
+
 
 if __name__ == '__main__':
    # zad1()
    #  zad2()
    #  zad3()
-   show(*zad5(zad3(),-50,1.5))
+   # show(*zad5(zad3(),-50,1.5))
+   show(*zad6(zad3(),100,150))
