@@ -15,5 +15,10 @@ def zadanie2():
     plt.imshow(arr, cmap="gray")
     plt.show()
 
+def zadanie3():
+    arr = np.random.randint(0, 256, (100,100), dtype=np.uint8)
+    plt.imshow(arr, cmap="gray")
+    plt.show()
+
 if __name__ == '__main__':
-    zadanie2()
+    zadanie3()
