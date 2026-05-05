@@ -1,4 +1,7 @@
+from filecmp import cmp
+
 import numpy as np
+import matplotlib.pyplot as plt
 
 def zad1():
     arr = np.array(
@@ -8,5 +11,13 @@ def zad1():
     print(arr)
     print(arr.shape)
 
+def zad2():
+    arr = np.zeros((100,100),dtype=np.uint8)
+    arr[50,20]=255
+
+    plt.imshow(arr,cmap='gray')
+    plt.show()
+
 if __name__ == '__main__':
-    zad1()
+   # zad1()
+    zad2()
