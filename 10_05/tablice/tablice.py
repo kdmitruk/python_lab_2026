@@ -81,7 +81,34 @@ def zadanie10():
     plt.plot(x,y)
     plt.show()
 
+def zadanie11():
+    x=np.linspace(0, 2 * math.pi * 5, 100)
+    xx, _ = np.meshgrid(x,x)
+    xx = np.sin(xx)
+    #plt.imshow(xx, cmap="gray")
+    #plt.show()
+    return xx
+
+def zadanie12():
+    x=np.linspace(0, 2 * math.pi * 5, 100)
+    _, xx = np.meshgrid(x,x)
+    xx = np.sin(xx)
+    #plt.imshow(xx, cmap="gray")
+    #plt.show()
+    return xx
+
+def zadanie13():
+    xx=zadanie11()+zadanie12()
+    # plt.imshow(xx, cmap="gray")
+    # plt.show()
+    return xx
+
+def zadanie14(image, mask):
+    result = image * mask
+    plt.imshow(result, cmap="gray")
+    plt.show()
+
 if __name__ == '__main__':
     #zadanie3i4(zadanie3(), zadanie4())
     # zadanie5(150, 1.8)
-    zadanie10()
+    zadanie14(zadanie4(), zadanie13())
