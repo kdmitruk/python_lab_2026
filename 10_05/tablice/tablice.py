@@ -53,9 +53,14 @@ def zadanie6(low,high):
     arr2[arr>high]=255
     zadanie3i4(arr,arr2)
 
+def zadanie7():
+    arr = np.random.randint(0, 256, (100, 100), dtype=np.uint8)
+    arr[40:60,40:70] = 255
+    plt.imshow(arr, cmap="gray", vmin= 0, vmax= 255)
+    plt.show()
 
 
 if __name__ == '__main__':
     #zadanie3i4(zadanie3(), zadanie4())
     # zadanie5(150, 1.8)
-    zadanie6(100,150)
+    zadanie7()
