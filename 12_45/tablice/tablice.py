@@ -50,6 +50,9 @@ def zad6(image,low,high):
     image1[image > high] = high
     return image,image1
 
+def zad7(image,top,left,bottom,right):
+    image[top:bottom,left:right] = 255
+    return  image
 
 
 if __name__ == '__main__':
@@ -57,4 +60,5 @@ if __name__ == '__main__':
    #  zad2()
    #  zad3()
    # show(*zad5(zad3(),-50,1.5))
-   show(*zad6(zad3(),100,150))
+   # show(*zad6(zad3(),100,150))
+   show(zad7(zad3(),10,20,30,40))
