@@ -37,8 +37,16 @@ def zad4():
     arr = np.random.normal(128,50,(100,100))
     return arr
 
+def zad5(image,brightness,contrast):
+
+    image1=np.clip(image.astype(np.int16)*contrast,0,255)
+    image2= np.clip(image.astype(np.int16) + brightness,0,255)
+
+    return image,image1, image2
+
+
 if __name__ == '__main__':
    # zad1()
    #  zad2()
    #  zad3()
-   show(zad3(), zad4())
+   show(*zad5(zad3(),-50,1.5))
