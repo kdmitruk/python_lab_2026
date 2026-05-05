@@ -17,8 +17,22 @@ def zadanie2():
 
 def zadanie3():
     arr = np.random.randint(0, 256, (100,100), dtype=np.uint8)
-    plt.imshow(arr, cmap="gray")
+    return arr
+    # plt.imshow(arr, cmap="gray")
+    # plt.show()
+
+def zadanie4():
+    arr = np.random.normal(128, 25, (100,100))
+    return arr
+    # plt.imshow(arr, cmap="gray", vmin= 0, vmax= 255)
+    # plt.show()
+
+def zadanie3i4(arr1, arr2):
+    _, (left, right) = plt.subplots(1, 2)
+    common_args = {"cmap": "gray", "vmin": 0, "vmax": 255}
+    left.imshow(arr1, **common_args)
+    right.imshow(arr2, **common_args)
     plt.show()
 
 if __name__ == '__main__':
-    zadanie3()
+    zadanie3i4(zadanie3(), zadanie4())
