@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 def show(*imgs):
     size = len(imgs)
     _, axes = plt.subplots(1, size)
-    kwargs = {"cmap": 'summer', "vmin": 0, "vmax": 255}
+    kwargs = {"cmap": 'summer'}
     if size == 1:
         axes.imshow(imgs[0], **kwargs)
     else:
@@ -62,6 +62,30 @@ def zad9():
     arr = np.tile(arr,(100,1))
     return arr
 
+def zad10():
+    x = np.linspace(0, 200*np.pi,10000)
+    y = np.sin(x)
+    plt.plot(x,y)
+    plt.show()
+
+def zad11():
+    arr = np.linspace(0, 5 * np.pi, 100)
+    arr, _ = np.meshgrid(arr, arr)
+    arr = np.sin(arr)
+    return arr
+
+def zad12():
+    arr = np.linspace(0, 5 * np.pi, 100)
+    _, arr = np.meshgrid(arr, arr)
+    arr = np.sin(arr)
+    return arr
+
+def zad13(img1, img2):
+    return img1 + img2
+
+def zad14(img1, img2):
+    return img1 * img2
+
 if __name__ == '__main__':
    # zad1()
    # zad2()
@@ -70,4 +94,9 @@ if __name__ == '__main__':
    # show(*zad6(zad3(),100,150))
    # show(zad7(zad3(),10,20,30,40))
    # show(zad8(zad7(zad3(),10,20,30,40)))
-    show(zad9())
+    #zad10()
+    z11 = zad11()
+    z12 = zad12()
+    z13 = zad13(z11, z12)
+    z14 = zad14(z13, zad3())
+    show(z11, z12, z13, z14)
