@@ -1,3 +1,5 @@
+from pickletools import uint8
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -34,5 +36,17 @@ def zadanie3i4(arr1, arr2):
     right.imshow(arr2, **common_args)
     plt.show()
 
+def zadanie5(bri, con):
+    _, axes = plt.subplots(1, 3)
+    arr0 = np.random.randint(0, 256, (100,100), dtype=np.uint8)
+    arr1 = np.clip(arr0.astype(np.uint16) * con,0,255)
+    arr2 = np.clip(arr0.astype(np.uint16) + bri, 0, 255)
+    common_args = {"cmap": "gray", "vmin": 0, "vmax": 255}
+    axes[0].imshow(arr0, **common_args)
+    axes[1].imshow(arr1, **common_args)
+    axes[2].imshow(arr2, **common_args)
+    plt.show()
+
 if __name__ == '__main__':
-    zadanie3i4(zadanie3(), zadanie4())
+    #zadanie3i4(zadanie3(), zadanie4())
+    zadanie5(150, 1.8)
