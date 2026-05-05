@@ -59,8 +59,22 @@ def zadanie7():
     plt.imshow(arr, cmap="gray", vmin= 0, vmax= 255)
     plt.show()
 
+def zadanie8():
+    arr = np.random.randint(0, 256, (100, 100), dtype=np.uint8)
+    arr[40:60, 40:70] = 255
+
+    arr = 255 - arr
+
+    plt.imshow(arr, cmap="gray", vmin= 0, vmax= 255)
+    plt.show()
+
+def zadanie9():
+    arr = np.linspace(0,255,100)
+    arr = np.tile(arr,(100,1))
+    plt.imshow(arr, cmap="gray", vmin=0, vmax=255)
+    plt.show()
 
 if __name__ == '__main__':
     #zadanie3i4(zadanie3(), zadanie4())
     # zadanie5(150, 1.8)
-    zadanie7()
+    zadanie9()
