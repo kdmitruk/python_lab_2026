@@ -46,7 +46,16 @@ def zadanie5(bri, con):
     axes[1].imshow(arr1, **common_args)
     axes[2].imshow(arr2, **common_args)
     plt.show()
+def zadanie6(low,high):
+    arr = np.random.randint(0, 256, (100, 100), dtype=np.uint8)
+    arr2=arr.copy()
+    arr2[arr<low]=0
+    arr2[arr>high]=255
+    zadanie3i4(arr,arr2)
+
+
 
 if __name__ == '__main__':
     #zadanie3i4(zadanie3(), zadanie4())
-    zadanie5(150, 1.8)
+    # zadanie5(150, 1.8)
+    zadanie6(100,150)
