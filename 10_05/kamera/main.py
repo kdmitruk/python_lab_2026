@@ -5,10 +5,16 @@ from viewer import *
 
 def zad1():
     img = cv2.imread("/tmp/img.webp")
-    plt.imshow(img)
-    plt.show()
-    #cv2.imshow("", img)
-    #cv2.waitKey()
+
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    h = hsv[:, :, 0] + 50 % 180
+    hsv[:, :, 0] = h
+    img = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+
+    #plt.imshow(img)
+    #plt.show()
+    cv2.imshow("", img)
+    cv2.waitKey()
 
 def zad2():
     cap = cv2.VideoCapture(0)
@@ -51,5 +57,6 @@ def zad3():
 
 
 if __name__ == '__main__':
-    viewer = HSVViewer()
-    viewer.run()
+    zad1()
+    #viewer = HSVViewer()
+    #viewer.run()
