@@ -1,6 +1,7 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+from viewer import *
 
 
 def zad1():
@@ -45,4 +46,5 @@ def zad3():
             break
 
 if __name__ == '__main__':
-    zad3()
+    viewer = Viewer(1, 0)
+    viewer.run()
