@@ -40,3 +40,10 @@ class BlurViewer(Viewer):
 class MedianViewer(BlurViewer):
     def processFrame(self, frame, modifier):
         return cv2.medianBlur(frame, modifier)
+
+class HSVViewer(Viewer):
+    def processFrame(self, frame, modifier):
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        h = hsv[:,:,0] + modifier % 180
+        hsv[:,:,0] = h
+        return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)

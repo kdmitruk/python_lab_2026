@@ -51,5 +51,5 @@ def zad3():
 
 
 if __name__ == '__main__':
-    viewer = MedianViewer()
+    viewer = HSVViewer()
     viewer.run()
