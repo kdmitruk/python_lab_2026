@@ -1,6 +1,8 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+from PIL.ImageEnhance import Brightness
+
 from viewer import *
 
 
@@ -46,5 +48,5 @@ def zad3():
             break
 
 if __name__ == '__main__':
-    viewer = Viewer(1, 0)
+    viewer = BrightnessViewer()
     viewer.run()

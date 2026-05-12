@@ -7,6 +7,7 @@ class Viewer:
         cv2.namedWindow("frame")
         cv2.createTrackbar("slider", "frame", slider_default, slider_count, lambda value: None)
         self.cap = cv2.VideoCapture(0)
+        self.slider_count = slider_count
 
     def run(self):
         while True:
@@ -23,3 +24,13 @@ class Viewer:
 
     def process_frame(self, frame, modifier):
         return frame
+
+class BrightnessViewer(Viewer):
+    def __init__(self):
+        super().__init__(511, 255)
+
+    def get_trackbar_pos(self):
+        return super().get_trackbar_pos() - self.slider_count//2
+
+    def process_frame(self, frame, modifier):
+        return np.clip(frame.astype(np.int16) + modifier, 0, 255).astype(np.uint8)
