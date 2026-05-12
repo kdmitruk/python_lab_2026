@@ -1,7 +1,7 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-
+from viewer import *
 
 def zad1():
     img = cv2.imread("/tmp/img.webp")
@@ -51,4 +51,5 @@ def zad3():
 
 
 if __name__ == '__main__':
-    zad3()
+    viewer = BrightnessViewer()
+    viewer.run()
