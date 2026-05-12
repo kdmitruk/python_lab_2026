@@ -34,3 +34,17 @@ class BrightnessViewer(Viewer):
 
     def process_frame(self, frame, modifier):
         return np.clip(frame.astype(np.int16) + modifier, 0, 255).astype(np.uint8)
+
+class BlurViewer(Viewer):
+    def __init__(self):
+        super().__init__(20, 0)
+
+    def get_trackbar_pos(self):
+        return super().get_trackbar_pos() * 2 + 1
+
+    def process_frame(self, frame, modifier):
+        return cv2.GaussianBlur(frame, (modifier, modifier), 0)
+
+class MedianViewer(BlurViewer):
+    def process_frame(self, frame, modifier):
+        return cv2.medianBlur(frame, modifier)
