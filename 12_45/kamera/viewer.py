@@ -48,3 +48,13 @@ class BlurViewer(Viewer):
 class MedianViewer(BlurViewer):
     def process_frame(self, frame, modifier):
         return cv2.medianBlur(frame, modifier)
+
+class HSVViewer(Viewer):
+    def __init__(self):
+        super().__init__(180, 0)
+
+    def process_frame(self, frame, modifier):
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        h = hsv[:,:,0]
+        h += modifier % self.slider_count
+        return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
