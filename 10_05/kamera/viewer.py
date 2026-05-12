@@ -36,3 +36,7 @@ class BlurViewer(Viewer):
         return super().getTrackbarPos()*2+1
     def processFrame(self, frame, modifier):
         return cv2.GaussianBlur(frame, (modifier,modifier), 0)
+
+class MedianViewer(BlurViewer):
+    def processFrame(self, frame, modifier):
+        return cv2.medianBlur(frame, modifier)
