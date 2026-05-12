@@ -57,6 +57,6 @@ def zad3():
 
 
 if __name__ == '__main__':
-    zad1()
-    #viewer = HSVViewer()
-    #viewer.run()
+    # zad1()
+    viewer = HSVViewer()
+    viewer.run()

@@ -47,4 +47,3 @@ class HSVViewer(Viewer):
         h = hsv[:,:,0] + modifier % 180
         hsv[:,:,0] = h
         return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
-

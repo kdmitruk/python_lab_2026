@@ -58,3 +58,19 @@ class HSVViewer(Viewer):
         h = hsv[:,:,0]
         h += modifier % self.slider_count
         return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+    
+class PixelViewer(Viewer):
+    def __init__(self):
+        super().__init__(25, 0)
+
+    def get_trackbar_pos(self):
+        return super().get_trackbar_pos() + 1
+
+    def process_frame(self, frame, modifier):
+        h, w = frame.shape[:2]
+        frame = cv2.resize(frame, (w // modifier, h//modifier),
+                           interpolation=cv2.INTER_LINEAR)
+
+        frame = cv2.resize(frame, (w, h), interpolation=cv2.INTER_NEAREST)
+
+        return frame
