@@ -1,5 +1,7 @@
+import math
+
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import AmbientLight, DirectionalLight, LVector3, LineSegs
+from panda3d.core import AmbientLight, DirectionalLight, LVector3, LineSegs, Point2
 from ball import Ball
 
 class Game(ShowBase):
@@ -21,6 +23,8 @@ class Game(ShowBase):
         directional.set_direction(LVector3(-1, -1, -2))
         self.render.set_light(self.render.attach_new_node(directional))
 
+        self.accept("mouse1", self.on_mouse_down)
+
         self.add_bounds()
         self.add_balls()
 
@@ -41,15 +45,24 @@ class Game(ShowBase):
         begin = LVector3(-Game.LIMIT, -Game.LIMIT, 0.2)
         end   = LVector3( Game.LIMIT,  Game.LIMIT, 0.2)
 
-        Ball.create_randomly_between(begin, end, ball, self.render, (1, 0, 0, 1))
-        Ball.create_randomly_between(begin, end, ball, self.render, (0, 0, 1, 1))
+        self.balls = []
 
-        # ball.reparentTo(self.render)
-        #
-        # ball.setScale(0.1)
-        # ball.setPos(5, 0, 0.2)
-        # ball.setColor(1, 0, 0, 0.5)
+        self.balls.append(Ball.create_randomly_between(begin, end, ball, self.render, (1, 0, 0, 1)))
+        self.balls.append(Ball.create_randomly_between(begin, end, ball, self.render, (0, 0, 1, 1)))
+        self.balls.append(Ball.create_randomly_between(begin, end, ball, self.render, (1, 1, 0, 1)))
 
+    def on_mouse_down(self):
+        mouse_pos = self.mouseWatcherNode.get_mouse()
+        print("Mouse", mouse_pos)
+        for ball in self.balls:
+            p3 = ball.model.getPos(self.camera)
+            p2 = Point2()
+            self.camLens.project(p3, p2)
+
+            min_dist = 0.05
+            dist = math.hypot(p2.x - mouse_pos.x, p2.y - mouse_pos.y)
+            if dist < min_dist:
+                print(ball.color)
 
 
 if __name__ == '__main__':

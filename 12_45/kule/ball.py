@@ -7,6 +7,7 @@ class Ball:
         self.model.setScale(0.1)
         self.model.setPos(*pos)
         self.model.setColor(*color)
+        self.color = color
 
     @staticmethod
     def create_randomly_between(begin, end, model, parent, color):
