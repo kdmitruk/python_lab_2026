@@ -1,6 +1,6 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import AmbientLight, DirectionalLight, LVector3, LineSegs
-
+from ball import Ball
 
 class Game(ShowBase):
     LIMIT = 5
@@ -38,11 +38,17 @@ class Game(ShowBase):
 
     def add_balls(self):
         ball = self.loader.loadModel("models/sphere")
-        ball.reparentTo(self.render)
+        begin = LVector3(-Game.LIMIT, -Game.LIMIT, 0.2)
+        end   = LVector3( Game.LIMIT,  Game.LIMIT, 0.2)
 
-        ball.setScale(0.1)
-        ball.setPos(5, 0, 0.2)
-        ball.setColor(1, 0, 0, 0.5)
+        Ball.create_randomly_between(begin, end, ball, self.render, (1, 0, 0, 1))
+        Ball.create_randomly_between(begin, end, ball, self.render, (0, 0, 1, 1))
+
+        # ball.reparentTo(self.render)
+        #
+        # ball.setScale(0.1)
+        # ball.setPos(5, 0, 0.2)
+        # ball.setColor(1, 0, 0, 0.5)
 
 
 
