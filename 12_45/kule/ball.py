@@ -1,4 +1,5 @@
 import random
+from panda3d.core import LVector3, Vec3
 
 
 class Ball:
@@ -8,6 +9,8 @@ class Ball:
         self.model.setPos(*pos)
         self.model.setColor(*color)
         self.color = color
+
+        self.velocity = Vec3(0, 0, 0)
 
     @staticmethod
     def create_randomly_between(begin, end, model, parent, color):
