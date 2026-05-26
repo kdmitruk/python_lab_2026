@@ -1,7 +1,6 @@
 import cv2.dnn
 import numpy as np
 
-
 def main():
     net = cv2.dnn.readNet("coco/model.pbtxt", "coco/weights.pb")
 
@@ -9,8 +8,6 @@ def main():
 
     file = open("coco/labels.txt", "r")
     labels = file.read().split("\n")
-
-
 
     confidence_threshold = 0.4
 
