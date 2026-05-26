@@ -22,6 +22,7 @@ class Game(ShowBase):
         self.render.set_light(self.render.attach_new_node(directional))
 
         self.add_bounds()
+        self.add_balls()
 
     def add_bounds(self):
         lines = LineSegs()
@@ -34,6 +35,10 @@ class Game(ShowBase):
         lines.setThickness(5)
         node = lines.create()
         self.render.attach_new_node(node)
+
+    def add_balls(self):
+        ball = self.loader.loadModel("models/sphere")
+        ball.reparentTo(self.render)
 
 
 
