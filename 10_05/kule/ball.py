@@ -1,4 +1,3 @@
-from panda3d.core import Vec3
 import random
 
 class Ball():
@@ -10,4 +9,5 @@ class Ball():
         self.model.setScale(0.1)
         self.model.setPos(x,y,z)
         self.model.setColor(*color)
+        self.color = color
 

@@ -1,10 +1,15 @@
+import math
+
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import Vec3
+from panda3d.core import Vec3, Point2
 from panda3d.core import AmbientLight, DirectionalLight, LVector3, LineSegs
+from sympy import Point2D
+
 from ball import Ball
 
 class Game(ShowBase):
     PLANESIZE=5
+
     def __init__(self):
         super().__init__()
         self.disable_mouse()
@@ -22,6 +27,8 @@ class Game(ShowBase):
         self.render.set_light(self.render.attach_new_node(directional))
         self.draw_bounds()
         self.add_balls()
+        self.accept("mouse1", self.mouse_click)
+
     def draw_bounds(self):
         lines=LineSegs()
         lines.moveTo(-Game.PLANESIZE,-Game.PLANESIZE,0)
@@ -32,18 +39,27 @@ class Game(ShowBase):
         lines.set_color(1,1,1,1)
         model=lines.create()
         self.render.attach_new_node(model)
+
     def add_balls(self):
         self.balls = []
         ball = self.loader.loadModel("models/sphere.egg")
-        #self.ball.reparentTo(self.render)
-        #self.ball.setPos(2,0,0)
-        #self.ball.setScale(0.1)
-        #self.ball.setColor(1,0,0,1)
+
         begin = Vec3(-Game.PLANESIZE,-Game.PLANESIZE,0)
         end = Vec3(Game.PLANESIZE,Game.PLANESIZE,0)
         self.balls.append(Ball(begin, end, (1,0,0,1), ball, self.render))
         self.balls.append(Ball(begin, end, (0,0,1,1), ball, self.render))
         self.balls.append(Ball(begin, end, (0,1,0,1), ball, self.render))
+
+    def mouse_click(self):
+        pos = self.mouseWatcherNode.getMouse()
+        print("x", pos)
+        for ball in self.balls:
+            ball_pos = ball.model.getPos(self.cam)
+            point2 = Point2()
+            self.camLens.project(ball_pos, point2)
+            dist = math.hypot(point2.x - pos.x, point2.y - pos.y)
+            if dist < 0.05:
+                print(ball.color)
 
 if __name__ == '__main__':
     app = Game()
