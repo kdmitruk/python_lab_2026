@@ -30,7 +30,8 @@ class Game(ShowBase):
         self.accept("mouse1", self.mouse_click)
         self.selectedBall = None
         self.accept("mouse1-up", self.mouse_up)
-
+        self.taskMgr.add(self.update,"update")
+        self.last_time = 0
     def draw_bounds(self):
         lines=LineSegs()
         lines.moveTo(-Game.PLANESIZE,-Game.PLANESIZE,0)
@@ -52,6 +53,16 @@ class Game(ShowBase):
         self.balls.append(Ball(begin, end, (0,0,1,1), ball, self.render))
         self.balls.append(Ball(begin, end, (0,1,0,1), ball, self.render))
 
+    def update(self,task):
+        dt = task.time - self.last_time
+        self.last_time = task.time
+
+        for ball in self.balls:
+            distance = ball.velocity * dt
+            ball.model.setPos(ball.model.getPos() + distance)
+
+        return task.cont
+
     def mouse_up(self):
         try:
             pos = self.mouseWatcherNode.getMouse()
@@ -64,6 +75,7 @@ class Game(ShowBase):
         dx = px - cx
         dy = py - cy
         print(dx , dy)
+        self.selectedBall.velocity = LVector3(dx,dy,0) * 5
 
     def mouse_click(self):
         pos = self.mouseWatcherNode.getMouse()
