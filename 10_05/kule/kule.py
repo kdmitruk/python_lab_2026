@@ -74,6 +74,26 @@ class Game(ShowBase):
                 ball.velocity.x *= -1
             if pos.y < -Game.PLANESIZE or pos.y > Game.PLANESIZE:
                 ball.velocity.y *= -1
+            BALL_RADIUS = 0.3
+            for i in range(len(self.balls)):
+                for j in range(i + 1, len(self.balls)):
+                    b1, b2 = self.balls[i], self.balls[j]
+                    p1, p2 = b1.model.get_pos(), b2.model.get_pos()
+                    diff = p1 - p2
+                    dist = diff.length()
+                    min_dist = 2 * BALL_RADIUS
+
+                    if dist < min_dist and dist > 1e-6:
+                        n = diff / dist
+                        overlap = min_dist - dist
+                        b1.model.set_pos(p1 + n * (overlap / 2))
+                        b2.model.set_pos(p2 - n * (overlap / 2))
+
+                        v1n = b1.velocity.dot(n)
+                        v2n = b2.velocity.dot(n)
+
+                        b1.velocity += n * (v2n - v1n)
+                        b2.velocity += n * (v1n - v2n)
 
         return task.cont
 
