@@ -6,6 +6,8 @@ from ball import Ball
 
 class Game(ShowBase):
     LIMIT = 5
+    FRICTION = 0.5
+
 
     def __init__(self):
         super().__init__()
@@ -28,9 +30,12 @@ class Game(ShowBase):
 
         self.accept("mouse1", self.on_mouse_down)
         self.accept("mouse1-up", self.on_mouse_up)
+        self.taskMgr.add(self.update, "update")
 
         self.add_bounds()
         self.add_balls()
+
+        self.last_time = 0
 
     def add_bounds(self):
         lines = LineSegs()
@@ -87,6 +92,29 @@ class Game(ShowBase):
         print(self.selected_ball.velocity)
         self.selected_ball = None
 
+    def update(self, task):
+        time = task.time
+        dt = time - self.last_time
+        self.last_time = time
+
+        for ball in self.balls:
+            move = ball.velocity * dt
+            pos = ball.model.getPos() + move
+            ball.model.setPos(pos)
+
+            if pos.x < -Game.LIMIT + Ball.RADIUS or pos.x > Game.LIMIT - Ball.RADIUS:
+                ball.velocity.x *= -1
+                pos.x = max(min(pos.x, Game.LIMIT - Ball.RADIUS), -Game.LIMIT + Ball.RADIUS)
+
+            if pos.y < -Game.LIMIT + Ball.RADIUS or pos.y > Game.LIMIT - Ball.RADIUS:
+                ball.velocity.y *= -1
+                pos.y = max(min(pos.y, Game.LIMIT - Ball.RADIUS), -Game.LIMIT + Ball.RADIUS)
+
+
+
+
+
+        return task.cont
 
 
 

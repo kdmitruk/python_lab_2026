@@ -85,9 +85,9 @@ class Game(ShowBase):
 
                     if dist < min_dist and dist > 1e-6:
                         n = diff / dist
-                        overlap = min_dist - dist
-                        b1.model.set_pos(p1 + n * (overlap / 2))
-                        b2.model.set_pos(p2 - n * (overlap / 2))
+                        #overlap = min_dist - dist
+                        b1.model.set_pos(p1 )
+                        b2.model.set_pos(p2)
 
                         v1n = b1.velocity.dot(n)
                         v2n = b2.velocity.dot(n)
