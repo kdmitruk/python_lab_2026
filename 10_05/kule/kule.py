@@ -1,4 +1,5 @@
 import math
+from xxlimited_35 import Null
 
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import Vec3, Point2
@@ -62,17 +63,23 @@ class Game(ShowBase):
 
         for ball in self.balls:
             distance = ball.velocity * dt
-            ball.model.setPos(ball.model.getPos() + distance)
+            pos = ball.model.getPos() + distance
+            ball.model.setPos(pos)
 
             speed = ball.velocity.length()
             if speed > 0:
                 new_speed = speed - deceleration
                 ball.velocity *= new_speed/speed
-
+            if pos.x < -Game.PLANESIZE or pos.x > Game.PLANESIZE:
+                ball.velocity.x *= -1
+            if pos.y < -Game.PLANESIZE or pos.y > Game.PLANESIZE:
+                ball.velocity.y *= -1
 
         return task.cont
 
     def mouse_up(self):
+        if not self.selectedBall:
+            return
         try:
             pos = self.mouseWatcherNode.getMouse()
             px, py = pos.x, pos.y
@@ -85,6 +92,7 @@ class Game(ShowBase):
         dy = py - cy
         print(dx , dy)
         self.selectedBall.velocity = LVector3(dx,dy,0) * 5
+        self.selectedBall=None
 
     def mouse_click(self):
         pos = self.mouseWatcherNode.getMouse()
