@@ -2,7 +2,7 @@ import random
 from panda3d.core import LVector3, Vec3
 
 class Ball:
-    RADIUS = 0.3
+    RADIUS = 0.325
 
     def __init__(self, model, parent, pos, color):
         self.model = model.copyTo(parent)

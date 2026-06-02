@@ -28,6 +28,8 @@ class Game(ShowBase):
         self.drag_start = None
 
         self.accept("mouse1", self.on_mouse_down)
+        self.accept("mouse2", self.on_cam_down)
+
         self.accept("mouse1-up", self.on_mouse_up)
         self.taskMgr.add(self.update, "update")
 
@@ -111,6 +113,28 @@ class Game(ShowBase):
                 ball.velocity.y *= -1
                 pos.y = max(min(pos.y, Game.LIMIT - Ball.RADIUS), -Game.LIMIT + Ball.RADIUS)
 
+            for i in range(len(self.balls)):
+                for j in range(i+1, len(self.balls)):
+                    b1 = self.balls[i]
+                    b2 = self.balls[j]
+
+                    pos1 = b1.model.getPos()
+                    pos2 = b2.model.getPos()
+
+                    diff = pos1 - pos2
+                    dist = diff.length()
+
+                    if dist < 2 * Ball.RADIUS:
+                        norm = diff / dist
+                        v1 = b1.velocity.dot(norm)
+                        v2 = b2.velocity.dot(norm)
+
+                        b1.velocity += norm * (v2 - v1)
+                        b2.velocity += norm * (v1 - v2)
+
+                        b1.velocity *= 1.05
+                        b2.velocity *= 1.05
+
             speed = ball.velocity.length()
 
             if speed > 0:
@@ -121,6 +145,7 @@ class Game(ShowBase):
                     ball.velocity = LVector3(0, 0, 0)
 
         return task.cont
+
 
 
 
