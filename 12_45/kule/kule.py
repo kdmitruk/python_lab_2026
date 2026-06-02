@@ -6,8 +6,7 @@ from ball import Ball
 
 class Game(ShowBase):
     LIMIT = 5
-    FRICTION = 0.5
-
+    FRICTION = 5
 
     def __init__(self):
         super().__init__()
@@ -97,6 +96,8 @@ class Game(ShowBase):
         dt = time - self.last_time
         self.last_time = time
 
+        friction = Game.FRICTION * dt
+
         for ball in self.balls:
             move = ball.velocity * dt
             pos = ball.model.getPos() + move
@@ -110,9 +111,14 @@ class Game(ShowBase):
                 ball.velocity.y *= -1
                 pos.y = max(min(pos.y, Game.LIMIT - Ball.RADIUS), -Game.LIMIT + Ball.RADIUS)
 
+            speed = ball.velocity.length()
 
-
-
+            if speed > 0:
+                new_speed = speed - friction
+                if new_speed > 0:
+                    ball.velocity *= new_speed/speed
+                else:
+                    ball.velocity = LVector3(0, 0, 0)
 
         return task.cont
 
