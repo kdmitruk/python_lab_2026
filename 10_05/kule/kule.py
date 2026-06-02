@@ -28,6 +28,8 @@ class Game(ShowBase):
         self.draw_bounds()
         self.add_balls()
         self.accept("mouse1", self.mouse_click)
+        self.selectedBall = None
+        self.accept("mouse1-up", self.mouse_up)
 
     def draw_bounds(self):
         lines=LineSegs()
@@ -50,8 +52,22 @@ class Game(ShowBase):
         self.balls.append(Ball(begin, end, (0,0,1,1), ball, self.render))
         self.balls.append(Ball(begin, end, (0,1,0,1), ball, self.render))
 
+    def mouse_up(self):
+        try:
+            pos = self.mouseWatcherNode.getMouse()
+            px, py = pos.x, pos.y
+
+        except:
+            px, py = self.clickPos
+
+        cx, cy = self.clickPos
+        dx = px - cx
+        dy = py - cy
+        print(dx , dy)
+
     def mouse_click(self):
         pos = self.mouseWatcherNode.getMouse()
+        self.clickPos = (pos.x, pos.y)
         print("x", pos)
         for ball in self.balls:
             ball_pos = ball.model.getPos(self.cam)
@@ -59,7 +75,9 @@ class Game(ShowBase):
             self.camLens.project(ball_pos, point2)
             dist = math.hypot(point2.x - pos.x, point2.y - pos.y)
             if dist < 0.05:
-                print(ball.color)
+                #print(ball.color)
+                self.selectedBall = ball
+
 
 if __name__ == '__main__':
     app = Game()
