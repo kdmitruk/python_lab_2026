@@ -7,13 +7,13 @@ from ball import Ball
 class Game(ShowBase):
     LIMIT = 5
     FRICTION = 5
+    CAMERA_DIST = 15
 
     def __init__(self):
         super().__init__()
         self.disable_mouse()
 
-        self.camera.set_pos(0, -15, 12)
-        self.camera.look_at(0, 0, 0)
+        self.set_cam_pos(math.pi/4)
 
         ambient = AmbientLight('ambient')
         ambient.set_color((0.5, 0.5, 0.5, 1))
@@ -28,7 +28,9 @@ class Game(ShowBase):
         self.drag_start = None
 
         self.accept("mouse1", self.on_mouse_down)
-        self.accept("mouse2", self.on_cam_down)
+        self.accept("mouse3", self.on_cam_down)
+        self.accept("mouse3-up", self.on_cam_up)
+
 
         self.accept("mouse1-up", self.on_mouse_up)
         self.taskMgr.add(self.update, "update")
@@ -37,6 +39,16 @@ class Game(ShowBase):
         self.add_balls()
 
         self.last_time = 0
+        self.enable_cam_move = False
+        self.cam_reference = 0
+
+    def set_cam_pos(self, angle):
+        camX = Game.CAMERA_DIST * -math.sin(angle)
+        camY = -Game.CAMERA_DIST * math.cos(angle)
+        camZ =  12
+        self.camera.set_pos(camX, camY, camZ)
+        self.camera.look_at(0, 0, 0)
+
 
     def add_bounds(self):
         lines = LineSegs()
@@ -64,12 +76,13 @@ class Game(ShowBase):
     def on_mouse_down(self):
         if not self.mouseWatcherNode.has_mouse(): return
         mouse_pos = self.mouseWatcherNode.get_mouse()
-        self.drag_start = Vec2(mouse_pos.x, mouse_pos.y)
+
         print("Mouse", mouse_pos)
         for ball in self.balls:
             p3 = ball.model.getPos(self.camera)
             p2 = Point2()
             self.camLens.project(p3, p2)
+            self.drag_start = p3
 
             min_dist = 0.05
             dist = math.hypot(p2.x - mouse_pos.x, p2.y - mouse_pos.y)
@@ -86,10 +99,14 @@ class Game(ShowBase):
 
         print(self.drag_start, mouse_pos)
 
-        dx = mouse_pos.x - self.drag_start.x
-        dy = mouse_pos.y - self.drag_start.y
+        p3 = self.selected_ball.model.getPos(self.camera)
 
-        self.selected_ball.velocity = Vec3(dx * 10, dy * 10, 0)
+
+        #dx = mouse_pos.x - self.drag_start.x
+        #dy = mouse_pos.y - self.drag_start.y
+
+        self.selected_ball.velocity = Vec3(p3 - self.drag_start)
+        self.selected_ball.velocity.z  = 0
         print(self.selected_ball.velocity)
         self.selected_ball = None
 
@@ -144,9 +161,20 @@ class Game(ShowBase):
                 else:
                     ball.velocity = LVector3(0, 0, 0)
 
+
+        if self.enable_cam_move:
+            cam_diff = self.mouseWatcherNode.get_mouse().x - self.cam_reference
+            self.set_cam_pos(cam_diff)
+
+
         return task.cont
 
+    def on_cam_down(self):
+        self.enable_cam_move = True
+        self.cam_reference = self.mouseWatcherNode.get_mouse().x
 
+    def on_cam_up(self):
+        self.enable_cam_move = False
 
 
 
