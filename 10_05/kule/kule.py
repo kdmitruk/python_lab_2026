@@ -32,6 +32,7 @@ class Game(ShowBase):
         self.accept("mouse1-up", self.mouse_up)
         self.taskMgr.add(self.update,"update")
         self.last_time = 0
+        self.friction = 0.5
     def draw_bounds(self):
         lines=LineSegs()
         lines.moveTo(-Game.PLANESIZE,-Game.PLANESIZE,0)
@@ -57,9 +58,17 @@ class Game(ShowBase):
         dt = task.time - self.last_time
         self.last_time = task.time
 
+        deceleration = self.friction * dt
+
         for ball in self.balls:
             distance = ball.velocity * dt
             ball.model.setPos(ball.model.getPos() + distance)
+
+            speed = ball.velocity.length()
+            if speed > 0:
+                new_speed = speed - deceleration
+                ball.velocity *= new_speed/speed
+
 
         return task.cont
 
