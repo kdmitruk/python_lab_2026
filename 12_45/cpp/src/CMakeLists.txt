@@ -10,3 +10,4 @@ find_package(pybind11 REQUIRED)
 
 pybind11_add_module(operations operations.cpp)
 pybind11_add_module(power power.cpp)
+pybind11_add_module(avg avg.cpp)
