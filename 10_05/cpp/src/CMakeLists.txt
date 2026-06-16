@@ -9,8 +9,10 @@ execute_process(
     OUTPUT_VARIABLE pybind11_DIR OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
+
 find_package(pybind11 REQUIRED)
 
 pybind11_add_module(operations operations.cpp)
+pybind11_add_module(power power.cpp)
 
 # cmake -S . -B ../build/
